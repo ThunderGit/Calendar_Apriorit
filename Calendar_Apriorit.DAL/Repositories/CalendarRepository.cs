@@ -31,10 +31,14 @@ namespace Calendar_Apriorit.DAL.Repositories
                 context.Calendars.Remove(item);
             }
         }
-
+        /// <summary>
+        /// Maybe useless method, need to think
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
         public IEnumerable<Calendar> Find(Func<Calendar, bool> predicate)
         {
-            throw new NotImplementedException();
+            return context.Calendars.Where(predicate).ToList();
         }
 
         public Calendar Get(int id)
@@ -50,6 +54,14 @@ namespace Calendar_Apriorit.DAL.Repositories
         public void Update(Calendar item)
         {
             context.Entry(item).State = EntityState.Modified;
+        }
+        /// <summary>
+        /// Метод по сути ничего не делает в этой реализации,надо ли контекст диспозить, если в EFUnitOfWork context диспозится
+        /// </summary>
+        public void Dispose()
+        {
+            
+            //возможно здесь нужно вызывать диспоуз на контекст, но я не знаю если честно
         }
     }
 }
