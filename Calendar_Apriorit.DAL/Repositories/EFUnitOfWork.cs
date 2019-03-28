@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Calendar_Apriorit.DAL.Repositories
 {
-    class EFUnitOfWork : IUnitOfWork
+    public class EFUnitOfWork : IUnitOfWork
     {
         private ApplicationContext context;
 

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FDFC72DF-62B1-43AB-9DF8-762B0DF00784}</ProjectGuid>
+    <ProjectGuid>{CB245072-FD57-45D4-898F-B46A9AA46CB5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Calendar_Apriorit.BLL</RootNamespace>
-    <AssemblyName>Calendar_Apriorit.BLL</AssemblyName>
+    <RootNamespace>Calendar_Apriorit.Infastructure</RootNamespace>
+    <AssemblyName>Calendar_Apriorit.Infastructure</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,16 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessConext.cs" />
-    <Compile Include="DTO\UserDTO.cs" />
+    <Compile Include="Business\IBusinessContext.cs" />
+    <Compile Include="IMapperService.cs" />
+    <Compile Include="IRootContext.cs" />
+    <Compile Include="IServiceProviderFactory.cs" />
+    <Compile Include="IWebContext.cs" />
+    <Compile Include="OperationDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <ProjectReference Include="..\Calendar_Apriorit.Infastructure\Calendar_Apriorit.Infastructure.csproj">
-      <Project>{cb245072-fd57-45d4-898f-b46a9aa46cb5}</Project>
-      <Name>Calendar_Apriorit.Infastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
