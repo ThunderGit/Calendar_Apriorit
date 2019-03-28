@@ -37,6 +37,7 @@
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.5.5.4\lib\net45\CommonServiceLocator.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -99,6 +100,10 @@
     <ProjectReference Include="..\Calendar_Apriorit.Infastructure\Calendar_Apriorit.Infastructure.csproj">
       <Project>{cb245072-fd57-45d4-898f-b46a9aa46cb5}</Project>
       <Name>Calendar_Apriorit.Infastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Calendar_Apriorit.ViewModel\Calendar_Apriorit.ViewModel.csproj">
+      <Project>{a70f3550-ee84-4232-adb9-bc1f7cc90406}</Project>
+      <Name>Calendar_Apriorit.ViewModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Calendar_Apriorit.DAL.Entities;
+using Calendar_Apriorit.ViewModel;
 
 namespace Calendar_Apriorit.Initialazer.MapperInit
 {
@@ -12,7 +14,9 @@ namespace Calendar_Apriorit.Initialazer.MapperInit
         {
             AutoMapper.Mapper.Initialize((map) =>
             {
-                throw new NotImplementedException();
+                //map.CreateMap<User, RegisterVM>().ForMember(dest => dest.Email,opts => opts.MapFrom(src => src.Email))
+
+                
             });
         }
     }

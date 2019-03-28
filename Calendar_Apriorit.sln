@@ -14,10 +14,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar_Apriorit.BLL", "Ca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar_Apriorit.Initialazer", "Calendar_Apriorit.Initialazer\Calendar_Apriorit.Initialazer.csproj", "{739BFB77-882D-4197-B7C3-355D94BF76C1}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A70F3550-EE84-4232-ADB9-BC1F7CC90406} = {A70F3550-EE84-4232-ADB9-BC1F7CC90406}
 		{FDFC72DF-62B1-43AB-9DF8-762B0DF00784} = {FDFC72DF-62B1-43AB-9DF8-762B0DF00784}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar_Apriorit.Infastructure", "Calendar_Apriorit.Infastructure\Calendar_Apriorit.Infastructure.csproj", "{CB245072-FD57-45D4-898F-B46A9AA46CB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Calendar_Apriorit.ViewModel", "Calendar_Apriorit.ViewModel\Calendar_Apriorit.ViewModel.csproj", "{A70F3550-EE84-4232-ADB9-BC1F7CC90406}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +48,10 @@ Global
 		{CB245072-FD57-45D4-898F-B46A9AA46CB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB245072-FD57-45D4-898F-B46A9AA46CB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB245072-FD57-45D4-898F-B46A9AA46CB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A70F3550-EE84-4232-ADB9-BC1F7CC90406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A70F3550-EE84-4232-ADB9-BC1F7CC90406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A70F3550-EE84-4232-ADB9-BC1F7CC90406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A70F3550-EE84-4232-ADB9-BC1F7CC90406}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
