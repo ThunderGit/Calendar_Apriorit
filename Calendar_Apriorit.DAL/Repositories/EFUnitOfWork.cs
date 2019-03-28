@@ -2,11 +2,13 @@
 using Calendar_Apriorit.DAL.EntityFramework;
 using Calendar_Apriorit.DAL.Identity;
 using Calendar_Apriorit.DAL.Interfaces;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Calendar_Apriorit.DAL.Repositories
 {
@@ -17,7 +19,16 @@ namespace Calendar_Apriorit.DAL.Repositories
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
         private IClientManager clientManager;
-        private CalendarRepository calendarRepository;
+        private GenericRepository<Calendar> calendarRepository;
+
+        public EFUnitOfWork(string connectionString)
+        {
+            context = new ApplicationContext(connectionString);
+            userManager = new ApplicationUserManager(new UserStore<User>(context));
+            roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
+            clientManager = new ClientManager(context);
+            calendarRepository = new GenericRepository<Calendar>(context);
+        }
         public ApplicationUserManager UserManager
         {
             get { return userManager; }
