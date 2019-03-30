@@ -50,5 +50,11 @@
     <Compile Include="OperationDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Calendar_Apriorit.ViewModel\Calendar_Apriorit.ViewModel.csproj">
+      <Project>{A70F3550-EE84-4232-ADB9-BC1F7CC90406}</Project>
+      <Name>Calendar_Apriorit.ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,7 +28,7 @@ namespace Calendar_Apriorit.Initialazer
 
         private static void RegisterBusinessTypes()
         {
-            throw new NotImplementedException();
+            _container.RegisterType<IUserDM, UserDM>();
         }
 
         private static void RegisterDataTypes()

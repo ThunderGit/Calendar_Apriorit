@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar_Apriorit.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Calendar_Apriorit.Infastructure
 {
-    interface IUserDM
+    public interface IUserDM : IDisposable
     {
-        //Task<OperationDetails> Create(UserDTO userDto);
-        //Task<ClaimsIdentity> Authenticate(UserDTO userDto);
-        //Task SetInitialData(UserDTO adminDto, List<string> roles);
+        Task<OperationDetails> Create(RegisterVM regUser);
+        Task<ClaimsIdentity> Authenticate(RegisterVM user);
+        Task SetInitialData(RegisterVM user, List<string> roles);
     }
 }
