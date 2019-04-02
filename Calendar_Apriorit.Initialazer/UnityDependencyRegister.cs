@@ -4,6 +4,7 @@ using Calendar_Apriorit.DAL.Repositories;
 using System;
 using Calendar_Apriorit.Infastructure;
 using Calendar_Apriorit.BLL;
+using Unity.Injection;
 
 namespace Calendar_Apriorit.Initialazer
 {
@@ -33,7 +34,7 @@ namespace Calendar_Apriorit.Initialazer
 
         private static void RegisterDataTypes()
         {
-            _container.RegisterType<IUnitOfWork, EFUnitOfWork>();
+            _container.RegisterType<IUnitOfWork, EFUnitOfWork>(new InjectionConstructor("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Calendar_Apriorit.mdf';Integrated Security=True"));
             
         }
     }
