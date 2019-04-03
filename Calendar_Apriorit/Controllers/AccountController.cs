@@ -75,7 +75,7 @@ namespace Calendar_Apriorit.Controllers
             await SetInitialDataAsync();
             if (ModelState.IsValid)
             {
-                using (var DomainUser = WebContext.Factory.GetService<IUserDM>())
+                using (var DomainUser = WebContext.Factory.GetService<IUserDM>(WebContext.RootContext))
                 {
                     
                     OperationDetails operationDetails = await DomainUser.Create(model);

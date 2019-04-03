@@ -34,7 +34,7 @@ namespace Calendar_Apriorit.Initialazer
 
         private static void RegisterDataTypes()
         {
-            _container.RegisterType<IUnitOfWork, EFUnitOfWork>(new InjectionConstructor("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Calendar_Apriorit.mdf';Integrated Security=True"));
+            _container.RegisterType<IUnitOfWork, EFUnitOfWork>(/*new InjectionConstructor("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Calendar_Apriorit.mdf';Integrated Security=True")*/);
             
         }
     }

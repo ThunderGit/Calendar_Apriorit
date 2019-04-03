@@ -2,6 +2,7 @@
 using Calendar_Apriorit.DAL.EntityFramework;
 using Calendar_Apriorit.DAL.Identity;
 using Calendar_Apriorit.DAL.Interfaces;
+using Calendar_Apriorit.Infastructure;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,25 @@ namespace Calendar_Apriorit.DAL.Repositories
         private IClientManager clientManager;
         private GenericRepository<Calendar> calendarRepository;
 
-        public EFUnitOfWork(string connectionString)
+        //public EFUnitOfWork(string connectionString)
+        //{
+        //    context = new ApplicationContext(connectionString);
+        //    userManager = new ApplicationUserManager(new UserStore<User>(context));
+        //    roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
+        //    clientManager = new ClientManager(context);
+        //    calendarRepository = new GenericRepository<Calendar>(context);
+        //}
+        public EFUnitOfWork(IRootContext cont)
         {
-            context = new ApplicationContext(connectionString);
+            context = new ApplicationContext(cont.ConnectionString);
+            userManager = new ApplicationUserManager(new UserStore<User>(context));
+            roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
+            clientManager = new ClientManager(context);
+            calendarRepository = new GenericRepository<Calendar>(context);
+        }
+        public EFUnitOfWork()//видел что юнити нужен конструктор без параметров
+        {
+            context = new ApplicationContext("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Calendar_Apriorit.mdf';Integrated Security=True");
             userManager = new ApplicationUserManager(new UserStore<User>(context));
             roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
             clientManager = new ClientManager(context);
@@ -57,6 +74,14 @@ namespace Calendar_Apriorit.DAL.Repositories
             GC.SuppressFinalize(this);
         }
         private bool disposed = false;
+        private void FixEfProviderServicesProblem()
+        {
+            // The Entity Framework provider type 'System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer'
+            // for the 'System.Data.SqlClient' ADO.NET provider could not be loaded. 
+            // Make sure the provider assembly is available to the running application. 
+            // See http://go.microsoft.com/fwlink/?LinkId=260882 for more information.
+            var instance = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+        }
 
         public virtual void Dispose(bool disposing)
         {

@@ -73,6 +73,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Calendar_Apriorit.Infastructure\Calendar_Apriorit.Infastructure.csproj">
+      <Project>{CB245072-FD57-45D4-898F-B46A9AA46CB5}</Project>
+      <Name>Calendar_Apriorit.Infastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
