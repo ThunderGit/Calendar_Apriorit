@@ -30,12 +30,12 @@ namespace Calendar_Apriorit.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(RegisterVM model)//Переделать под другую логин модель
+        public async Task<ActionResult> Login(LoginVM model)//Переделать под другую логин модель
         {
             await SetInitialDataAsync();
             if (ModelState.IsValid)
             {
-                using (var DomainUser = WebContext.Factory.GetService<IUserDM>())
+                using (var DomainUser = WebContext.Factory.GetService<IUserDM>(WebContext.RootContext))
                 {
                     //UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
                     ClaimsIdentity claim = await DomainUser.Authenticate(model);

@@ -17,7 +17,7 @@ namespace Calendar_Apriorit.BLL
         #region Constructors
         public UserDM(IRootContext context) : base(context) { }
         #endregion
-        public async Task<ClaimsIdentity> Authenticate(RegisterVM authUser)
+        public async Task<ClaimsIdentity> Authenticate(LoginVM authUser)
         {
             using (var repo = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
