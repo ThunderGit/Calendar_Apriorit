@@ -55,6 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Calendar.cs" />
+    <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\EventInfo.cs" />
+    <Compile Include="Entities\Group.cs" />
+    <Compile Include="Entities\RepeatInfo.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserInfo.cs" />
     <Compile Include="Entities\UserRole.cs" />

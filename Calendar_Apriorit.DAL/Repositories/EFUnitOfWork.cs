@@ -21,6 +21,15 @@ namespace Calendar_Apriorit.DAL.Repositories
         private ApplicationRoleManager roleManager;
         private IClientManager clientManager;
         private GenericRepository<Calendar> calendarRepository;
+        private GenericRepository<Event> eventRepository;
+        private GenericRepository<Group> groupRepository;
+        private GenericRepository<RepeatInfo> repinfoRepository;
+        private GenericRepository<EventInfo> eventinfoRepository;
+
+
+
+
+
 
         //public EFUnitOfWork(string connectionString)
         //{
@@ -37,6 +46,10 @@ namespace Calendar_Apriorit.DAL.Repositories
             roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
             clientManager = new ClientManager(context);
             calendarRepository = new GenericRepository<Calendar>(context);
+            eventinfoRepository = new GenericRepository<EventInfo>(context);
+            eventRepository = new GenericRepository<Event>(context);
+            groupRepository = new GenericRepository<Group>(context);
+            repinfoRepository = new GenericRepository<RepeatInfo>(context);
         }
         public EFUnitOfWork()//видел что юнити нужен конструктор без параметров
         {
@@ -45,6 +58,12 @@ namespace Calendar_Apriorit.DAL.Repositories
             roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
             clientManager = new ClientManager(context);
             calendarRepository = new GenericRepository<Calendar>(context);
+            eventinfoRepository = new GenericRepository<EventInfo>(context);
+            eventRepository = new GenericRepository<Event>(context);
+            groupRepository = new GenericRepository<Group>(context);
+            repinfoRepository = new GenericRepository<RepeatInfo>(context);
+
+
         }
         public ApplicationUserManager UserManager
         {
@@ -63,6 +82,12 @@ namespace Calendar_Apriorit.DAL.Repositories
         {
             get { return calendarRepository; }
         }
+
+        public GenericRepository<Event> Events { get => eventRepository; }
+        public GenericRepository<Group> Groups { get => groupRepository; }
+        public GenericRepository<RepeatInfo> RepeatInfos { get => repinfoRepository;}
+        public GenericRepository<EventInfo> Eventinfos { get => eventinfoRepository;}
+
         public async Task SaveAsync()
         {
             await context.SaveChangesAsync();

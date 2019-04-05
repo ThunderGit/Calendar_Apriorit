@@ -19,6 +19,11 @@ namespace Calendar_Apriorit.DAL.EntityFramework
         public DbSet<UserInfo> UserInfos { get; set; }
 
         public DbSet<Calendar> Calendars { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Group> UserGroups { get; set; }
+        public DbSet<EventInfo> EventInfos { get; set; }
+        public DbSet<RepeatInfo> RepeatInfos { get; set; }
+
         private void FixEfProviderServicesProblem()
         {
             // The Entity Framework provider type 'System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer'

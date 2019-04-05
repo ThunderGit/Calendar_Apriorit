@@ -13,5 +13,8 @@ namespace Calendar_Apriorit.DAL.Entities
     public class User : IdentityUser
     {
         public virtual UserInfo UserInfo { get; set; }
+        public virtual Calendar UserCalendar { get; set; }
+        public virtual ICollection<Group> UserGroups { get; set; }
+
     }
 }
