@@ -14,9 +14,14 @@ namespace Calendar_Apriorit.DAL.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         ApplicationUserManager UserManager { get; }
-        IClientManager ClientManager { get; }
+        //IClientManager ClientManager { get; }
         ApplicationRoleManager RoleManager { get; }
-        IRepository<Calendar> Calendars { get; } 
+        IRepository<Calendar> Calendars { get; }
+        IRepository<Event> Events { get; }
+        IRepository<Group> Groups { get; }
+        IRepository<EventInfo> EventInfos { get; }
+        IRepository<RepeatInfo> RepeatInfos { get; }
+
         Task SaveAsync();
     }
 }

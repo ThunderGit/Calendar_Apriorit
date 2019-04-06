@@ -55,17 +55,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Calendar.cs" />
+    <Compile Include="Entities\Event.cs" />
+    <Compile Include="Entities\EventInfo.cs" />
+    <Compile Include="Entities\Group.cs" />
+    <Compile Include="Entities\RepeatInfo.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserInfo.cs" />
     <Compile Include="Entities\UserRole.cs" />
     <Compile Include="EntityFramework\ApplicationContext.cs" />
+    <Compile Include="EntityFramework\ContextInitializer.cs" />
     <Compile Include="Identity\ApplicationRoleManager .cs" />
     <Compile Include="Identity\ApplicationUserManager.cs" />
     <Compile Include="Interfaces\IClientManager.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ClientManager.cs" />
     <Compile Include="Repositories\EFUnitOfWork.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
   </ItemGroup>
