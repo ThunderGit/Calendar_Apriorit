@@ -19,7 +19,7 @@ namespace Calendar_Apriorit.DAL.Repositories
 
         private ApplicationUserManager userManager;
         private ApplicationRoleManager roleManager;
-        private IClientManager clientManager;
+        //private IClientManager clientManager;
         private GenericRepository<Calendar> calendarRepository;
         private GenericRepository<Event> eventRepository;
         private GenericRepository<Group> groupRepository;
@@ -44,7 +44,7 @@ namespace Calendar_Apriorit.DAL.Repositories
             context = new ApplicationContext(cont.ConnectionString);
             userManager = new ApplicationUserManager(new UserStore<User>(context));
             roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
-            clientManager = new ClientManager(context);
+            //clientManager = new ClientManager(context);
             calendarRepository = new GenericRepository<Calendar>(context);
             eventinfoRepository = new GenericRepository<EventInfo>(context);
             eventRepository = new GenericRepository<Event>(context);
@@ -56,7 +56,7 @@ namespace Calendar_Apriorit.DAL.Repositories
             context = new ApplicationContext("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='|DataDirectory|\\Calendar_Apriorit.mdf';Integrated Security=True");
             userManager = new ApplicationUserManager(new UserStore<User>(context));
             roleManager = new ApplicationRoleManager(new RoleStore<UserRole>(context));
-            clientManager = new ClientManager(context);
+            //clientManager = new ClientManager(context);
             calendarRepository = new GenericRepository<Calendar>(context);
             eventinfoRepository = new GenericRepository<EventInfo>(context);
             eventRepository = new GenericRepository<Event>(context);
@@ -70,10 +70,10 @@ namespace Calendar_Apriorit.DAL.Repositories
             get { return userManager; }
         }
 
-        public IClientManager ClientManager
-        {
-            get { return clientManager; }
-        }
+        //public IClientManager ClientManager
+        //{
+        //    get { return clientManager; }
+        //}
         public ApplicationRoleManager RoleManager
         {
             get { return roleManager; }
@@ -83,10 +83,10 @@ namespace Calendar_Apriorit.DAL.Repositories
             get { return calendarRepository; }
         }
 
-        public GenericRepository<Event> Events { get => eventRepository; }
-        public GenericRepository<Group> Groups { get => groupRepository; }
-        public GenericRepository<RepeatInfo> RepeatInfos { get => repinfoRepository;}
-        public GenericRepository<EventInfo> Eventinfos { get => eventinfoRepository;}
+        public IRepository<Event> Events { get => eventRepository; }
+        public IRepository<Group> Groups { get => groupRepository; }
+        public IRepository<RepeatInfo> RepeatInfos { get => repinfoRepository;}
+        public IRepository<EventInfo> EventInfos { get => eventinfoRepository;}
 
         public async Task SaveAsync()
         {
@@ -117,8 +117,12 @@ namespace Calendar_Apriorit.DAL.Repositories
                     context.Dispose();//Уточнить нужность диспоуза контекста
                     userManager.Dispose();
                     roleManager.Dispose();
-                    clientManager.Dispose();
+                    //clientManager.Dispose();
                     calendarRepository.Dispose();
+                    eventinfoRepository.Dispose();
+                    groupRepository.Dispose();
+                    eventRepository.Dispose();
+                    repinfoRepository.Dispose();
 
                 }
                 this.disposed = true;

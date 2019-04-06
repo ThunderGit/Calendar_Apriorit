@@ -45,8 +45,7 @@ namespace Calendar_Apriorit.BLL
                     if (result.Errors.Count() > 0)
                         return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
                     await Database.UserManager.AddToRoleAsync(user.Id, regUser.Role);
-                    UserInfo userInfo = new UserInfo { Id = user.Id,UserCalendar = new Calendar() , Name = regUser.Name };
-                    Database.ClientManager.Create(userInfo);
+                    
                     await Database.SaveAsync();
                     return new OperationDetails(true, "Регистрация успешно пройдена", "");
                 }

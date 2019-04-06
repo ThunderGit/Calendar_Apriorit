@@ -9,6 +9,7 @@
         public string MonthForRepeat { get; set; }//maybe need enum
         public bool IsUnlimitedQuanties { get; set; }
         public int QuantityRepeats { get; set; }
+        public EventInfo EventInfo { get; set; }
 
     }
 }

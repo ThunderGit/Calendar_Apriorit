@@ -17,6 +17,7 @@ namespace Calendar_Apriorit.DAL.Entities
         public int Id { get; set; }
         public virtual ICollection<Event> Events { get; set; }
         public DateTime Month { get; set; }
+        public virtual User User { get; set; }
 
 
 
