@@ -41,6 +41,7 @@ namespace Calendar_Apriorit.BLL
                 if (user == null)
                 {
                     user = new User { Email = regUser.Email, UserName = regUser.Email };
+                    user.UserCalendar = new Calendar() { User = user };
                     var result = await Database.UserManager.CreateAsync(user, regUser.Password);
                     if (result.Errors.Count() > 0)
                         return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
@@ -55,6 +56,7 @@ namespace Calendar_Apriorit.BLL
                 }
             }
         }
+        
 
         public async Task SetInitialData(RegisterVM user, List<string> roles)
         {
