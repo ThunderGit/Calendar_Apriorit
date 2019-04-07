@@ -46,10 +46,15 @@ namespace Calendar_Apriorit.Controllers
                     else
                     {
                         AuthenticationManager.SignOut();
+                        var freshClaims = new List<Claim>
+                        {
+                           new Claim(ClaimTypes.Email, model.Email),
+                        };
                         AuthenticationManager.SignIn(new AuthenticationProperties
                         {
                             IsPersistent = true
                         }, claim);
+                        AuthenticationManager.AuthenticationResponseGrant.Identity.AddClaims(freshClaims);
                         return RedirectToAction("Index", "Home");
                     }
                 }

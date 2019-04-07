@@ -30,6 +30,7 @@ namespace Calendar_Apriorit.Initialazer
         private static void RegisterBusinessTypes()
         {
             _container.RegisterType<IUserDM, UserDM>();
+            _container.RegisterType<ICalendarDM, CalendarDM>();
         }
 
         private static void RegisterDataTypes()

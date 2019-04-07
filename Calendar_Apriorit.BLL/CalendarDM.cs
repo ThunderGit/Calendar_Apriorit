@@ -17,30 +17,59 @@ namespace Calendar_Apriorit.BLL
     {
         #region Constructors
         public CalendarDM(IRootContext context) : base(context) { }
-
+        #endregion
         public async Task<OperationDetails> AddNewEvent(EventVM eventVM,string EMail)
         {
             using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
                 User user = await Database.UserManager.FindByEmailAsync(EMail);
                 Calendar cal = user.UserCalendar;
+                GetCalendarFromVM(eventVM, cal);
+                var result = await Database.UserManager.UpdateAsync(user);
+                if (result.Errors.Count() > 0)
+                    return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
+                await Database.SaveAsync();
+                return new OperationDetails(true, "Success", "");
                 
                 
             }
         }
+        private void GetCalendarFromVM(EventVM eventVM,Calendar calendar)
+        {
+            EventInfo eventInfo = Context.Mapper.MapTo<EventInfo, EventInfoVM>(eventVM.EventInfo);
+            Event _event = Context.Mapper.MapTo<Event, EventVM>(eventVM);
+            if (eventVM.EventInfo.IsRepeated)
+            {
+                RepeatInfo repeatInfo = Context.Mapper.MapTo<RepeatInfo, RepeatInfoVM>(eventVM.EventInfo.RepeatInfo);
+                repeatInfo.EventInfo = eventInfo;
+                eventInfo.RepeatInfo = repeatInfo;
+            }
+            
 
-       
+            eventInfo.EventForThisInfo = _event;
+            _event.EventInfo = eventInfo;
+            _event.Calendars.Add(calendar);
+            calendar.Events.Add(_event);
+
+        }
 
         public Task<OperationDetails> EditEvent(EventVM eventVM, string EMail)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<EventVM>> GetEvents(string EMail)
+        public async Task<List<EventVM>> GetEvents(string EMail)
         {
-            throw new NotImplementedException();
+            using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
+            {
+                User user = await Database.UserManager.FindByEmailAsync(EMail);
+                Calendar cal = user.UserCalendar;
+
+
+                return null;//заглушка
+            }
         }
-        #endregion
+        
 
     }
 }

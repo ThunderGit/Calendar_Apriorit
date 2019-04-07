@@ -8,7 +8,7 @@ namespace Calendar_Apriorit.ViewModel
 {
     public class EventVM
     {
-        public int Id { get; set; }
+        public int IdEvent { get; set; }
         public string Title { get; set; }
         public EventInfoVM EventInfo { get; set; }
 
