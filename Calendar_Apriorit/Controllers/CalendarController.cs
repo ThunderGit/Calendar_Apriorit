@@ -32,13 +32,21 @@ namespace Calendar_Apriorit.Controllers
                     EventVM model = new EventVM()
                     {
                         Title = "title",
-                        EventInfo = new EventInfoVM() { Description = " description", IsRepeated = false, StartTime = DateTime.Today }
+                        EventInfo = new EventInfoVM() { Description = " description", IsRepeated = false, StartTime = DateTime.Today, EndTime = DateTime.Today }
 
                     };
-                    var claims = AuthenticationManager.AuthenticationResponseGrant.Identity.FindFirst(c => c.Type == ClaimTypes.Email);
-                    var email = claims.Value;
-                    
-                    var result = await CalendarDomain.AddNewEvent(model,email);
+                    if (AuthenticationManager.User.HasClaim(c => c.Type == ClaimTypes.Email))
+                    {
+                        var email2 = User.Identity.Name;
+                        //var claims = AuthenticationManager.AuthenticationResponseGrant.Identity.FindFirst(c => c.Type == ClaimTypes.Email);
+                        //var email = claims.Value;
+
+                        OperationDetails result = await CalendarDomain.AddNewEvent(model, email2);
+                        if (result.Succedeed)
+                            return View("SuccessRegister");
+                        
+
+                    }
                     
                     
                 }

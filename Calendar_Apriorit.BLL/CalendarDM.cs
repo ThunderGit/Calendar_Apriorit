@@ -24,6 +24,13 @@ namespace Calendar_Apriorit.BLL
             {
                 User user = await Database.UserManager.FindByEmailAsync(EMail);
                 Calendar cal = user.UserCalendar;
+                if(cal == null)
+                {
+                    user.UserCalendar = new Calendar { User = user };
+                    var result2 = await Database.UserManager.UpdateAsync(user);
+                    if (result2.Errors.Count() > 0)
+                        return new OperationDetails(false, result2.Errors.FirstOrDefault(), "");
+                }
                 GetCalendarFromVM(eventVM, cal);
                 var result = await Database.UserManager.UpdateAsync(user);
                 if (result.Errors.Count() > 0)
@@ -48,7 +55,12 @@ namespace Calendar_Apriorit.BLL
 
             eventInfo.EventForThisInfo = _event;
             _event.EventInfo = eventInfo;
-            _event.Calendars.Add(calendar);
+            _event.Calendars = new List<Calendar>
+            {
+                calendar
+            };
+            if (calendar.Events.Count == 0)
+                calendar.Events = new List<Event>();
             calendar.Events.Add(_event);
 
         }

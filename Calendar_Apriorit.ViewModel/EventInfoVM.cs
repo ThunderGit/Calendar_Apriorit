@@ -10,6 +10,7 @@ namespace Calendar_Apriorit.ViewModel
     {
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public bool IsRepeated { get; set; }
         public RepeatInfoVM RepeatInfo { get; set; }
     }
