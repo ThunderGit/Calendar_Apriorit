@@ -134,15 +134,23 @@ namespace Calendar_Apriorit.BLL
 
         
 
-        public async Task<List<EventVM>> GetEvents(string EMail)
+       public async Task<List<EventVM>> GetEvents(string Email)
         {
             using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
-                User user = await Database.UserManager.FindByEmailAsync(EMail);
+                User user = await Database.UserManager.FindByEmailAsync(Email);
                 Calendar cal = user.UserCalendar;
 
+                if (cal == null)
+                {
+                    return null;
+                }
 
-                return null;//заглушка
+                List<Event> events = cal.Events.ToList<Event>();
+                
+                List<EventVM> _eventsVM= Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+                
+                return _eventsVM;
             }
         }
         
