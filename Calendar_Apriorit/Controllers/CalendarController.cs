@@ -58,7 +58,14 @@ namespace Calendar_Apriorit.Controllers
             {
                 string email = User.Identity.Name;
                 List<EventVM> events = await CalendarDomain.GetEvents(email);
-                return events;
+                if (events != null)
+                {
+                    return events;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }
