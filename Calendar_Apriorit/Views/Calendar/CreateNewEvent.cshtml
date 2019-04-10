@@ -1,0 +1,181 @@
+﻿@model Calendar_Apriorit.ViewModel.EventVM
+
+@{
+	ViewBag.Title = "CreateNewEvent";
+}
+<fieldset>
+	<div class="form-horizontal">
+		<div class="editor-label">
+			Title
+		</div>
+		<div class="editor-label">
+			<input type="text" id="Title" />
+		</div>
+
+		<div class="editor-label">
+			Description
+		</div>
+		<div class="editor-label">
+			<input type="text" id="Description" />
+		</div>
+
+		<div class="editor-label">
+			Time start event
+		</div>
+		<div class="editor-label">
+			<input type="datetime-local" min="@DateTime.Now"id="StartTime" />
+		</div>
+		<div class="editor-label">
+			Time finish event
+		</div>
+		<div class="editor-label">
+			<input type="datetime-local" min="@DateTime.Now" id="EndTime" />
+		</div>
+		<div class="editor-label">
+			Event is repeated
+		</div>
+		<div class="editor-label">
+			<input type="checkbox" name="IsRepeated" id="IsRepeated" />
+		</div>
+		<script>
+			$(document).ready(function () {
+				$("input#IsRepeated").change(function () {
+					if ($(this).prop('checked')) {
+						$('#hide').fadeOut().show();
+					} else {
+						$('#hide').fadeIn(300);
+					}
+				});
+			})
+		</script>
+		<div id="hide" style="display:none" ;>
+			<div class="editor-label">
+				Месяц повтора
+			</div>
+			<div class="editor-label">
+				<input type="month" id="MonthRepeat" />
+			</div>
+			<div class="editor-label">
+				День повтора
+			</div>
+			<div class="editor-label">
+				<input type="text" id="DayRepeat" />
+			</div>
+			<div class="editor-label">
+				Количество повторов
+			</div>
+			<div class="editor-label">
+				<input type="number" id="QuantityRepeats" />
+			</div>
+
+		</div>
+		<div class="editor-label">
+			<br />
+			<input class="btn-default" type="button" id="CreateNewEvent" value="Save" />
+		</div>
+	</div>
+</fieldset>
+<script type="text/javascript">
+	$(function () {
+		$("#CreateNewEvent").click(function () {
+			var RepeatInfoVM;
+			var EventInfoVM;
+			if ("input#IsRepeated" == true) {
+				RepeatInfoVM = JSON.stringify({
+					'WeekDayForRepeat': $('#DayRepeat').val(),
+					'MonthForRepeat': $('#MonthRepeat').val(),
+					'QuantityRepeats': $('#QuantityRepeats').val(),
+				});
+				EventInfoVM = JSON.stringify({
+					'Desription': $('#Description').val(),
+					'EndTime': $('#EndTime').val(),
+					'StartTime': $('#StartTime').val(),
+					'RepeatInfoVM': RepeatInfoVM
+				});
+			}
+			else {
+				EventInfoVM = JSON.stringify({
+					'Desription': $('#Description').val(),
+					'EndTime': $('#EndTime').val(),
+					'StartTime': $('#StartTime').val(),
+					'RepeatInfoVM': RepeatInfoVM
+				});
+
+			}
+			var EventVM = JSON.stringify({
+				'Id': null;
+				'Title': $('#title').val(),
+				'EventInfoVM': EventInfoVM;
+				//'name': $('#myName').val(),
+			});
+			$.ajax({
+				type: "POST",
+				url: "/Account/CreateNewEvent",
+				//if("input#IsRepeated" == true)
+				data: { EventVM },
+				success: function (response) {
+					alert("Sucsses");
+				},
+				failure: function (response) {
+					alert(response.responseText);
+				},
+				error: function (response) {
+					alert(response.responseText);
+				}
+			});
+		});
+	});
+</script>
+
+@*<h2>CreateNewEvent</h2>
+
+<div class="form-horizontal">
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	<div class="form-group">
+		@Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			@Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.EventInfo.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			@Html.EditorFor(model => model.EventInfo.Description, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.EventInfo.Description, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.EventInfo.StartTime, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			@Html.EditorFor(model => model.EventInfo.StartTime, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.EventInfo.StartTime, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.EventInfo.EndTime, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			@Html.EditorFor(model => model.EventInfo.EndTime, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.EventInfo.EndTime, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(model => model.EventInfo.IsRepeated, htmlAttributes: new { @class = "control-label col-md-2" })
+		<div class="col-md-10">
+			@Html.EditorFor(model => model.EventInfo.IsRepeated, new { htmlAttributes = new { @class = "form-control" } })
+			@Html.ValidationMessageFor(model => model.EventInfo.IsRepeated, "", new { @class = "text-danger" })
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<input type="submit" value="Регистрация" class="btn btn-default" />
+		</div>
+	</div>
+</div>*@
+

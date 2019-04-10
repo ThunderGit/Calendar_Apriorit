@@ -20,21 +20,26 @@ namespace Calendar_Apriorit.Controllers
                 return HttpContext.GetOwinContext().Authentication;
             }
         }
-        //[HttpPost]
+
+        public ActionResult CreateNewEvent()
+        {
+            return View();
+        }
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateNewEvent(/*EventVM model*/)
+        public async Task<ActionResult> CreateNewEvent(EventVM model)
         {
            
             //if (ModelState.IsValid)
             {
                 using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
                 {
-                    EventVM model = new EventVM()
-                    {
-                        Title = "title",
-                        EventInfo = new EventInfoVM() { Description = " description", IsRepeated = false, StartTime = new DateTime(2019,4,11,15,0,0), EndTime = new DateTime(2019, 4, 11, 17, 0, 0) }
+                    //EventVM model = new EventVM()
+                    //{
+                    //    Title = "title",
+                    //    EventInfo = new EventInfoVM() { Description = " description", IsRepeated = false, StartTime = new DateTime(2019,4,11,15,0,0), EndTime = new DateTime(2019, 4, 11, 17, 0, 0) }
 
-                    };
+                    //};
                     
                     var email2 = User.Identity.Name;
                         
@@ -42,6 +47,7 @@ namespace Calendar_Apriorit.Controllers
                     if (result.Succedeed)
                         return View("SuccessRegister");
                         
+
 
                   
                     
