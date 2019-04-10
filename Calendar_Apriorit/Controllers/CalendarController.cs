@@ -52,10 +52,11 @@ namespace Calendar_Apriorit.Controllers
         }
         
 
-        public async Task<List<EventVM>> ShowEvents(string email)
+        public async Task<List<EventVM>> ShowEvents()
         {
             using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
             {
+                string email = User.Identity.Name;
                 List<EventVM> events = await CalendarDomain.GetEvents(email);
                 return events;
             }
