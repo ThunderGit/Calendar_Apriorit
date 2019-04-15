@@ -1,11 +1,20 @@
-﻿namespace Calendar_Apriorit.ViewModel
+﻿using System.Runtime.Serialization;
+
+namespace Calendar_Apriorit.ViewModel
 {
+    [DataContract]
     public class RepeatInfoVM
     {
-        public string WeekDayForRepeat { get; set; }//maybe need enum
-        //need for events,that repeats every year
-        public string MonthForRepeat { get; set; }//maybe need enum
+        [DataMember]
+
+        public string WeekDayForRepeat { get; set; }
+        [DataMember]
+        public string MonthForRepeat { get; set; }
+        [DataMember]
+
         public bool IsUnlimitedQuanties { get; set; }
+        [DataMember]
+
         public int QuantityRepeats { get; set; }
     }
 }

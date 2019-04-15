@@ -78,6 +78,8 @@
 <script type="text/javascript">
 	$(function () {
 		$("#CreateNewEvent").click(function () {
+			var EventVM;
+			
 			var RepeatInfoVM;
 			var EventInfoVM;
 			if ("input#IsRepeated" == true) {
@@ -102,27 +104,33 @@
 				});
 
 			}
-			var EventVM = JSON.stringify({
-				'Id': null;
-				'Title': $('#title').val(),
-				'EventInfoVM': EventInfoVM;
-				//'name': $('#myName').val(),
+			EventVM = JSON.stringify({
+				'Id': null,
+				'Title': $('#Title').val(),
+
 			});
+			console.log("3");
 			$.ajax({
 				type: "POST",
-				url: "/Account/CreateNewEvent",
-				//if("input#IsRepeated" == true)
-				data: { EventVM },
-				success: function (response) {
-					alert("Sucsses");
-				},
-				failure: function (response) {
-					alert(response.responseText);
-				},
-				error: function (response) {
-					alert(response.responseText);
-				}
+				url: "/Calendar/CreateNewEvent",
+				data: { EventVM, EventInfoVM, RepeatInfoVM },
+				beforeSend: function () {
+					
+					
+						},
+						success: function (response) {
+							alert("Sucsses");
+							window.location.href = "/Home/Index";
+
+						},
+						failure: function (response) {
+							alert(response.responseText);
+						},
+						error: function (response) {
+							alert(response.responseText);
+						}
 			});
+			
 		});
 	});
 </script>

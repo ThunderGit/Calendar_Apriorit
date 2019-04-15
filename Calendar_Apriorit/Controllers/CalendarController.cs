@@ -2,10 +2,16 @@
 using Calendar_Apriorit.ViewModel;
 using Microsoft.Owin.Security;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.IO;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Calendar_Apriorit.Controllers
 {
@@ -27,36 +33,63 @@ namespace Calendar_Apriorit.Controllers
         }
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateNewEvent(EventVM model)
+        public async Task<string> CreateNewEvent(string EventVM,string EventInfoVM,string RepeatInfoVM)
         {
-           
+            EventVM model = new EventVM();
+            model = DeserializeEventVM(EventVM, EventInfoVM, RepeatInfoVM);
+
             //if (ModelState.IsValid)
             {
                 using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
                 {
-                    //EventVM model = new EventVM()
-                    //{
-                    //    Title = "title",
-                    //    EventInfo = new EventInfoVM() { Description = " description", IsRepeated = false, StartTime = new DateTime(2019,4,11,15,0,0), EndTime = new DateTime(2019, 4, 11, 17, 0, 0) }
-
-                    //};
                     
+
                     var email2 = User.Identity.Name;
-                        
+
                     OperationDetails result = await CalendarDomain.AddNewEvent(model, email2);
                     if (result.Succedeed)
-                        return View("SuccessRegister");
-                        
+                        return "Успех";
+                    else return "Провал :" + result.Message;
 
 
-                  
-                    
-                    
+
+
+
+
                 }
             }
-            return View();
+           
         }
-        
+
+        private static EventVM DeserializeEventVM(string EventVM, string EventInfoVM, string RepeatInfoVM)
+        {
+            EventVM model;
+            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes((string)EventVM)))
+            {
+                var serialiser = new DataContractJsonSerializer(typeof(EventVM));
+                model = (EventVM)serialiser.ReadObject(ms);
+               
+            }
+            using (var ms = new MemoryStream(Encoding.Unicode.GetBytes((string)EventInfoVM)))
+            {
+                var serialiser = new DataContractJsonSerializer(typeof(EventInfoVM), new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm") });
+                //model = (EventVM)serialiser.ReadObject(ms);
+                model.EventInfo = (EventInfoVM)serialiser.ReadObject(ms);
+                if (model.EventInfo.IsRepeated == true)
+                {
+                    using (var ms2 = new MemoryStream(Encoding.Unicode.GetBytes(RepeatInfoVM)))
+                    {
+                        var serialiser2 = new DataContractJsonSerializer(typeof(RepeatInfoVM));
+
+                        model.EventInfo.RepeatInfo = (RepeatInfoVM)serialiser2.ReadObject(ms2);
+
+                    }
+
+                }
+            }
+
+            return model;
+        }
 
         public async Task<List<EventVM>> ShowEvents()
         {
