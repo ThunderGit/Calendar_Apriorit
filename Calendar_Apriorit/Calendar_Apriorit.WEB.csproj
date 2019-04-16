@@ -228,6 +228,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Calendar\SuccessRegister.cshtml" />
     <Content Include="Views\Calendar\CreateNewEvent.cshtml" />
+    <Content Include="Views\Calendar\EditEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

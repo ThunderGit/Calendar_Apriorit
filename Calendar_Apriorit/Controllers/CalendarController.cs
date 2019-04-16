@@ -17,8 +17,6 @@ namespace Calendar_Apriorit.Controllers
 {
     public class CalendarController : BaseController
     {
-       
-
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -32,33 +30,37 @@ namespace Calendar_Apriorit.Controllers
             return View();
         }
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         public async Task<string> CreateNewEvent(string EventVM,string EventInfoVM,string RepeatInfoVM)
         {
             EventVM model = new EventVM();
             model = DeserializeEventVM(EventVM, EventInfoVM, RepeatInfoVM);
-
-            //if (ModelState.IsValid)
+            using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
             {
-                using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
-                {
-                    
+                var email2 = User.Identity.Name;
+                OperationDetails result = await CalendarDomain.AddNewEvent(model, email2);
+                if (result.Succedeed)
+                    return "Успех";
+                else return "Провал :" + result.Message;
+            }  
+        }
 
-                    var email2 = User.Identity.Name;
-
-                    OperationDetails result = await CalendarDomain.AddNewEvent(model, email2);
-                    if (result.Succedeed)
-                        return "Успех";
-                    else return "Провал :" + result.Message;
-
-
-
-
-
-
-                }
+        public ActionResult EditEvent()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<string> EditEvent(string EventVM, string EventInfoVM, string RepeatInfoVM)
+        {
+            EventVM model = new EventVM();
+            model = DeserializeEventVM(EventVM, EventInfoVM, RepeatInfoVM);
+            using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
+            {
+                var email2 = User.Identity.Name;
+                OperationDetails result = await CalendarDomain.EditEvent(model, email2);
+                if (result.Succedeed)
+                    return "Успех";
+                else return "Провал :" + result.Message;
             }
-           
         }
 
         private static EventVM DeserializeEventVM(string EventVM, string EventInfoVM, string RepeatInfoVM)
@@ -73,7 +75,6 @@ namespace Calendar_Apriorit.Controllers
             using (var ms = new MemoryStream(Encoding.Unicode.GetBytes((string)EventInfoVM)))
             {
                 var serialiser = new DataContractJsonSerializer(typeof(EventInfoVM), new DataContractJsonSerializerSettings() { DateTimeFormat = new DateTimeFormat("yyyy'-'MM'-'dd'T'HH':'mm") });
-                //model = (EventVM)serialiser.ReadObject(ms);
                 model.EventInfo = (EventInfoVM)serialiser.ReadObject(ms);
                 if (model.EventInfo.IsRepeated == true)
                 {
