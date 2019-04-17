@@ -1,0 +1,151 @@
+﻿@model Calendar_Apriorit.ViewModel.EventVM
+
+@{
+	ViewBag.Title = "CreateNewEvent";
+}
+<fieldset>
+	<div class="form-horizontal">
+		<div class="editor-label">
+			Title
+		</div>
+		<div class="editor-label">
+			<input type="text" id="Title" />
+		</div>
+
+		<div class="editor-label">
+			Description
+		</div>
+		<div class="editor-label">
+			<input type="text" id="Description" />
+		</div>
+
+		<div class="editor-label">
+			Time start event
+		</div>
+		<div class="editor-label">
+			<input type="datetime-local" min="@DateTime.Now"id="StartTime" />
+		</div>
+		<div class="editor-label">
+			Time finish event
+		</div>
+		<div class="editor-label">
+			<input type="datetime-local" min="@DateTime.Now" id="EndTime" />
+		</div>
+		<div class="editor-label">
+			Event is repeated
+		</div>
+		<div class="editor-label">
+			<input type="checkbox" onchange="document.getElementById('hide').style.display = this.checked ? 'block' : 'none'" name="IsRepeated" id="IsRepeated" />
+		</div>
+		
+		<div id="hide" style="display:none" ;>
+			<div class="editor-label">
+				Месяц повтора
+			</div>
+			<div class="editor-label">
+				<select id="Month">
+					<option value="Junuary">Junuary</option>
+					<option value="February">February</option>
+					<option value="Marth">Marth</option>
+					<option value="April">April</option>
+					<option value="May">May</option>
+					<option value="June">June</option>
+					<option value="Jule">Jule</option>
+					<option value="August">August</option>
+					<option value="September">September</option>
+					<option value="October">October</option>
+					<option value="November">November</option>
+					<option value="December">December</option>
+					<option selected value="">None</option>
+				</select>
+			</div>
+			<div class="editor-label">
+				День повтора
+			</div>
+			<div class="editor-label">
+				<select id="DayRepeat">
+					<option value="Monday">Monday</option>
+					<option value="Tuesday">Tuesday</option>
+					<option value="Wendsday">Wendsday</option>
+					<option value="Thursday">Thursday</option>
+					<option value="Friday">Friday</option>
+					<option value="Saturday">Saturday</option>
+					<option value="Sunday">Sunday</option>
+					<option selected value="">None</option>
+				</select>
+			</div>
+			<div class="editor-label">
+				Количество повторов
+			</div>
+			<div class="editor-label">
+				<input type="number" id="QuantityRepeats" />
+			</div>
+
+		</div>
+		<div class="editor-label">
+			<br />
+			<input class="btn-default" type="button" id="CreateNewEvent" value="Save" />
+		</div>
+	</div>
+</fieldset>
+<script type="text/javascript">
+	$(function () {
+		$("#CreateNewEvent").click(function () {
+			var EventVM;
+			
+			var RepeatInfoVM;
+			var EventInfoVM;
+			if ($("#IsRepeated").prop("checked")) {
+				RepeatInfoVM = JSON.stringify({
+					'WeekDayForRepeat': $('#DayRepeat').val(),
+					'MonthForRepeat': $('#MonthRepeat').val(),
+					'QuantityRepeats': $('#QuantityRepeats').val(),
+				});
+				EventInfoVM = JSON.stringify({
+					'Description': $('#Description').val(),
+					'EndTime': $('#EndTime').val(),
+					'StartTime': $('#StartTime').val(),
+					'RepeatInfoVM': RepeatInfoVM,
+					'IsRepeated': true
+				});
+			}
+			else {
+				EventInfoVM = JSON.stringify({
+					'Description': $('#Description').val(),
+					'EndTime': $('#EndTime').val(),
+					'StartTime': $('#StartTime').val(),
+					'RepeatInfoVM': RepeatInfoVM,
+					'IsRepeated': false
+				});
+
+			}
+			EventVM = JSON.stringify({
+				'Id': null,
+				'Title': $('#Title').val(),
+
+			});
+			console.log("3");
+			$.ajax({
+				type: "POST",
+				url: "/Calendar/CreateNewEvent",
+				data: { EventVM, EventInfoVM, RepeatInfoVM },
+				beforeSend: function () {
+					
+					
+						},
+						success: function (response) {
+							alert("Sucsses");
+							window.location.href = "/Home/Index";
+
+						},
+						failure: function (response) {
+							alert(response.responseText);
+						},
+						error: function (response) {
+							alert(response.responseText);
+						}
+			});
+			
+		});
+	});
+</script>

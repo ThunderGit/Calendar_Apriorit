@@ -17,7 +17,7 @@ namespace Calendar_Apriorit.BLL
         #region Constructors
         public UserDM(IRootContext context) : base(context) { }
         #endregion
-        public async Task<ClaimsIdentity> Authenticate(RegisterVM authUser)
+        public async Task<ClaimsIdentity> Authenticate(LoginVM authUser)
         {
             using (var repo = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
@@ -41,12 +41,12 @@ namespace Calendar_Apriorit.BLL
                 if (user == null)
                 {
                     user = new User { Email = regUser.Email, UserName = regUser.Email };
+                    user.UserCalendar = new Calendar() { User = user };
                     var result = await Database.UserManager.CreateAsync(user, regUser.Password);
                     if (result.Errors.Count() > 0)
                         return new OperationDetails(false, result.Errors.FirstOrDefault(), "");
                     await Database.UserManager.AddToRoleAsync(user.Id, regUser.Role);
-                    UserInfo userInfo = new UserInfo { Id = user.Id,UserCalendar = new Calendar() , Name = regUser.Name };
-                    Database.ClientManager.Create(userInfo);
+                    
                     await Database.SaveAsync();
                     return new OperationDetails(true, "Регистрация успешно пройдена", "");
                 }
@@ -56,6 +56,7 @@ namespace Calendar_Apriorit.BLL
                 }
             }
         }
+        
 
         public async Task SetInitialData(RegisterVM user, List<string> roles)
         {

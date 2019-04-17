@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar_Apriorit.Initialazer.MapperInit;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +17,8 @@ namespace Calendar_Apriorit
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            ModelMapper.Init();
+
         }
     }
 }

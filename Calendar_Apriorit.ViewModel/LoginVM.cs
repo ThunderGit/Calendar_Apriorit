@@ -7,28 +7,12 @@ using System.Threading.Tasks;
 
 namespace Calendar_Apriorit.ViewModel
 {
-    public class RegisterVM
+    public class LoginVM
     {
-       
         [Required]
         public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password")]
-        public string ConfirmPassword { get; set; }
-        [Required]
-        public string Name { get; set; }
-        public string Role
-        {
-            get
-            {
-                return "user";
-            }
-        }
-       
-        
     }
 }
