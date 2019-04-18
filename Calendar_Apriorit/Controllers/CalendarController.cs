@@ -25,6 +25,12 @@ namespace Calendar_Apriorit.Controllers
             }
         }
 
+        public ActionResult Calendar()
+        {
+            return View();
+        }
+
+
         public ActionResult CreateNewEvent()
         {
             return View();
@@ -91,21 +97,20 @@ namespace Calendar_Apriorit.Controllers
 
             return model;
         }
-
-        public async Task<List<EventVM>> ShowEvents()
+        [HttpPost]
+        public async Task<JsonResult> ShowEvents()
         {
             using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
             {
                 string email = User.Identity.Name;
-                List<EventVM> events = await CalendarDomain.GetEvents(email);
-                if (events != null)
+                IEnumerable<EventVM> events = await CalendarDomain.GetEvents(email);
+                if (Request.IsAjaxRequest())
                 {
-                    return events;
+
+                    return Json(events, JsonRequestBehavior.AllowGet);
                 }
-                else
-                {
-                    return null;
-                }
+                else throw new NotImplementedException();
+                
             }
         }
     }
