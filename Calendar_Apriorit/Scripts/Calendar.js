@@ -11,12 +11,12 @@ $(function ()
 		{
 			if (DayOfWeek[DayOfWeek_INDEX] == Days[0].weekday)
 			{
-                u = true;
+                		u = true;
 			}
 			else
 			{
 				calendar_content.append('<div class="blank"></div>');
-                DayOfWeek_INDEX++;
+                		DayOfWeek_INDEX++;
 			}
 		}
 		for (var i = 0; i < 42 - DayOfWeek_INDEX; i++)
@@ -50,7 +50,7 @@ $(function ()
 				weekday: DayOfWeek[GetNewdateDay(Year, Month, i)]
 			})
 		}
-        return e;
+        	return e;
 	}
 
 	function SetWeekdays()
@@ -80,12 +80,12 @@ $(function ()
 
 	function GetNewdateDate(year, month)
 	{
-        return (new Date(year, month, 0)).getDate();
+        	return (new Date(year, month, 0)).getDate();
 	}
 
 	function GetNewdateDay(year, month, day)
 	{
-        return (new Date(year, month - 1, day)).getDay();
+        	return (new Date(year, month - 1, day)).getDay();
 	}
 
 	function CheackNewdate(date)
@@ -102,7 +102,7 @@ $(function ()
 	{
 		var date = new Date;
 		Year = date.getFullYear();
-        Month = date.getMonth() + 1;
+       		Month = date.getMonth() + 1;
 	}
 	var e = 480;
 	var Year = 2013;
@@ -126,22 +126,22 @@ $(function ()
 			if (Month < 1)
 			{
 				Month = 12;
-                Year--;
+               			Year--;
 			}
 			else if (Month > 12)
 			{
 				Month = 1;
-                Year++;
+                		Year++;
 			}
-            MainFunction();
+            		MainFunction();
 		};
 		if (e.attr("class").indexOf("left") != -1)
 		{
-            SurfDirection("previous");
+            		SurfDirection("previous");
 		}
 		else
 		{
-            SurfDirection("next");
+            		SurfDirection("next");
 		}
 	})
 })
