@@ -1,147 +1,147 @@
 $(function ()
 {
-	function c()
+	function MainFunction()
 	{
-		p();
-		var e = h();
-		var r = 0;
+		SetWeekdays();
+		var Days = SetDays();
+		var DayOfWeek_INDEX = 0;
 		var u = false;
-		l.empty();
+		calendar_content.empty();
 		while (!u)
 		{
-			if (s[r] == e[0].weekday)
+			if (DayOfWeek[DayOfWeek_INDEX] == Days[0].weekday)
 			{
-				u = true
+                u = true;
 			}
 			else
 			{
-				l.append('<div class="blank"></div>');
-				r++
+				calendar_content.append('<div class="blank"></div>');
+                DayOfWeek_INDEX++;
 			}
 		}
-		for (var c = 0; c < 42 - r; c++)
+		for (var i = 0; i < 42 - DayOfWeek_INDEX; i++)
 		{
-			if (c >= e.length)
+			if (i >= Days.length)
 			{
-				l.append('<div class="blank"></div>')
+				calendar_content.append('<div class="blank"></div>')
 			}
 			else
 			{
-				var v = e[c].day;
-				var m = g(new Date(t, n - 1, v)) ? '<div class="today">' : "<div>";
-				l.append(m + "" + v + "</div>")
+				var v = Days[i].day;
+				var m = CheackNewdate(new Date(Year, Month - 1, v)) ? '<div class="today">' : "<div>";
+				calendar_content.append(m + "" + v + "</div>")
 			}
 		}
-		var y = o[n - 1];
-		a.css("background-color", y).find("h1").text(i[n - 1] + " " + t);
-		f.find("div").css("color", y);
-		l.find(".today").css("background-color", y);
-		d()
+		var y = MonthColor[Month - 1];
+		calendar_header.css("background-color", y).find("h1").text(MONTHS[Month - 1] + " " + Year);
+		calendar_weekdays.find("div").css("color", y);
+		calendar_content.find(".today").css("background-color", y);
+		SetCSS()
 	}
 
-	function h()
+	function SetDays()
 	{
 		var e = [];
-		for (var r = 1; r < v(t, n) + 1; r++)
+		for (var i = 1; i < GetNewdateDate(Year, Month) + 1; i++)
 		{
 			e.push(
 			{
-				day: r,
-				weekday: s[m(t, n, r)]
+				day: i,
+				weekday: DayOfWeek[GetNewdateDay(Year, Month, i)]
 			})
 		}
-		return e
+        return e;
 	}
 
-	function p()
+	function SetWeekdays()
 	{
-		f.empty();
-		for (var e = 0; e < 7; e++)
+		calendar_weekdays.empty();
+		for (var i = 0; i < 7; i++)
 		{
-			f.append("<div>" + s[e].substring(0, 3) + "</div>")
+			calendar_weekdays.append("<div>" + DayOfWeek[i].substring(0, 3) + "</div>")
 		}
 	}
 
-	function d()
+	function SetCSS()
 	{
-		var t;
-		var n = $("#calendar").css("width", e + "px");
-		n.find(t = "#calendar_weekdays, #calendar_content").css("width", e + "px").find("div").css(
+		var CalendarElementsIDs;
+		var CalendarStyle = $("#calendar").css("width", e + "px");
+		CalendarStyle.find(CalendarElementsIDs = "#calendar_weekdays, #calendar_content").css("width", e + "px").find("div").css(
 		{
 			width: e / 7 + "px",
 			height: e / 7 + "px",
 			"line-height": e / 7 + "px"
 		});
-		n.find("#calendar_header").css(
+		CalendarStyle.find("#calendar_header").css(
 		{
 			height: e * (1 / 7) + "px"
 		}).find('i[class^="icon-chevron"]').css("line-height", e * (1 / 7) + "px")
 	}
 
-	function v(e, t)
+	function GetNewdateDate(year, month)
 	{
-		return (new Date(e, t, 0)).getDate()
+        return (new Date(year, month, 0)).getDate();
 	}
 
-	function m(e, t, n)
+	function GetNewdateDay(year, month, day)
 	{
-		return (new Date(e, t - 1, n)).getDay()
+        return (new Date(year, month - 1, day)).getDay();
 	}
 
-	function g(e)
+	function CheackNewdate(date)
 	{
-		return y(new Date) == y(e)
+		return GetFullDate(new Date) == GetFullDate(date)
 	}
 
-	function y(e)
+	function GetFullDate(date)
 	{
-		return e.getFullYear() + "/" + (e.getMonth() + 1) + "/" + e.getDate()
+		return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
 	}
 
-	function b()
+	function SetDate()
 	{
-		var e = new Date;
-		t = e.getFullYear();
-		n = e.getMonth() + 1
+		var date = new Date;
+		Year = date.getFullYear();
+        Month = date.getMonth() + 1;
 	}
 	var e = 480;
-	var t = 2013;
-	var n = 9;
+	var Year = 2013;
+	var Month = 9;
 	var r = [];
-	var i = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-	var s = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	var o = ["#16a085", "#1abc9c", "#c0392b", "#27ae60", "#FF6860", "#f39c12", "#f1c40f", "#e67e22", "#2ecc71", "#e74c3c", "#d35400", "#2c3e50"];
-	var u = $("#calendar");
-	var a = u.find("#calendar_header");
-	var f = u.find("#calendar_weekdays");
-	var l = u.find("#calendar_content");
-	b();
-	c();
-	a.find('i[class^="icon-chevron"]').on("click", function ()
+	var MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+	var DayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+	var MonthColor = ["#16a085", "#1abc9c", "#c0392b", "#27ae60", "#FF6860", "#f39c12", "#f1c40f", "#e67e22", "#2ecc71", "#e74c3c", "#d35400", "#2c3e50"];
+	var Calendar = $("#calendar");
+	var calendar_header = Calendar.find("#calendar_header");
+	var calendar_weekdays = Calendar.find("#calendar_weekdays");
+	var calendar_content = Calendar.find("#calendar_content");
+	SetDate();
+	MainFunction();
+	calendar_header.find('i[class^="icon-chevron"]').on("click", function ()
 	{
 		var e = $(this);
-		var r = function (e)
+		var SurfDirection = function (e)
 		{
-			n = e == "next" ? n + 1 : n - 1;
-			if (n < 1)
+			Month = e == "next" ? Month + 1 : Month - 1;
+			if (Month < 1)
 			{
-				n = 12;
-				t--
+				Month = 12;
+                Year--;
 			}
-			else if (n > 12)
+			else if (Month > 12)
 			{
-				n = 1;
-				t++
+				Month = 1;
+                Year++;
 			}
-			c()
+            MainFunction();
 		};
 		if (e.attr("class").indexOf("left") != -1)
 		{
-			r("previous")
+            SurfDirection("previous");
 		}
 		else
 		{
-			r("next")
+            SurfDirection("next");
 		}
 	})
 })
