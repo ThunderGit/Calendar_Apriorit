@@ -18,7 +18,7 @@ namespace Calendar_Apriorit.BLL
         #region Constructors
         public CalendarDM(IRootContext context) : base(context) { }
         #endregion
-        public async Task<OperationDetails> AddNewEvent(EventVM eventVM,string EMail)
+        public async Task<OperationDetails> AddNewEvent(EventVM eventVM, string EMail)
         {
             using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
@@ -44,9 +44,9 @@ namespace Calendar_Apriorit.BLL
             }
         }
 
-        private bool IsEventSatisfiesSchedule(DateTime start,DateTime end, Calendar cal)
+        private bool IsEventSatisfiesSchedule(DateTime start, DateTime end, Calendar cal)
         {
-            
+
             bool IsAnyEventsThatStartsBetweenStartAndEndTime = cal.Events.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList().Count() > 0;
             bool IsAnyEventsThatEndsBetweenStartAndEndTime = cal.Events.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList().Count() > 0;
             if (IsAnyEventsThatStartsBetweenStartAndEndTime || IsAnyEventsThatEndsBetweenStartAndEndTime)
@@ -55,7 +55,7 @@ namespace Calendar_Apriorit.BLL
 
         }
 
-        private void AddFromEventVMtoCalendar(EventVM eventVM,Calendar calendar)
+        private void AddFromEventVMtoCalendar(EventVM eventVM, Calendar calendar)
         {
             EventInfo eventInfo = Context.Mapper.MapTo<EventInfo, EventInfoVM>(eventVM.EventInfo);
             Event _event = Context.Mapper.MapTo<Event, EventVM>(eventVM);
@@ -65,8 +65,6 @@ namespace Calendar_Apriorit.BLL
                 repeatInfo.EventInfo = eventInfo;
                 eventInfo.RepeatInfo = repeatInfo;
             }
-            
-
             eventInfo.EventForThisInfo = _event;
             _event.EventInfo = eventInfo;
             _event.Calendars = new List<Calendar>
@@ -95,16 +93,11 @@ namespace Calendar_Apriorit.BLL
                 {
                     await EditEventInDatabase(Database, editThisEvent, eventVM);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return new OperationDetails(false, ex.Message, "");
                 }
-
                 return new OperationDetails(true, "Done", "");
-
-
-
-
             }
         }
 
@@ -113,9 +106,8 @@ namespace Calendar_Apriorit.BLL
             EventInfo eventInfoEdit = editThisEvent.EventInfo;
             RepeatInfo repeatInfoEdit = eventInfoEdit.RepeatInfo;
             editThisEvent.Title = eventVM.Title;
-            //проверить не создает ли автомаппер новую ссылку
             eventInfoEdit = Context.Mapper.MapTo<EventInfo, EventInfoVM>(eventVM.EventInfo);
-            if(eventVM.EventInfo.IsRepeated == false)
+            if (eventVM.EventInfo.IsRepeated == false)
             {
                 eventInfoEdit.RepeatInfo = null;
                 database.RepeatInfos.Remove(repeatInfoEdit);
@@ -126,15 +118,8 @@ namespace Calendar_Apriorit.BLL
             }
             database.Events.Update(editThisEvent);
             await database.SaveAsync();
-
-            
-
         }
-
-
-        
-
-       public async Task<List<EventVM>> GetEvents(string Email)
+        public async Task<List<EventVM>> GetEvents(string Email)
         {
             using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
@@ -147,13 +132,110 @@ namespace Calendar_Apriorit.BLL
                 }
 
                 List<Event> events = cal.Events.ToList<Event>();
-                
-                List<EventVM> _eventsVM= Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
-                
+                List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+                List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
+                MultiplyRepeatEvents(_eventsVM, RepeatEvents);
                 return _eventsVM;
             }
         }
-        
+
+        private void MultiplyRepeatEvents(List<EventVM> _eventsVM, List<EventVM> RepeatEvents)
+        {
+            foreach (var _eventVM in RepeatEvents)
+            {
+                if (!_eventVM.EventInfo.RepeatInfo.IsUnlimitedQuanties)
+                {
+                    for (int i = 0; i < _eventVM.EventInfo.RepeatInfo.QuantityRepeats; i++)
+                    {
+                        _eventsVM.Add(new EventVM
+                        {
+                            IdEvent = _eventVM.IdEvent,
+                            Title = _eventVM.Title,
+                            EventInfo = new EventInfoVM()
+                            {
+                                Description = _eventVM.EventInfo.Description,
+                                IsRepeated = true,
+                                RepeatInfo = null,
+                                EndTime = CalculateTimeSpanForEvent(_eventVM.EventInfo.EndTime, _eventVM.EventInfo.RepeatInfo.TypeRepeat, i + 1),
+                                StartTime = CalculateTimeSpanForEvent(_eventVM.EventInfo.StartTime, _eventVM.EventInfo.RepeatInfo.TypeRepeat, i + 1)
+
+
+                            }
+
+                        });
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 25; i++)
+                    {
+                        _eventsVM.Add(new EventVM
+                        {
+                            IdEvent = _eventVM.IdEvent,
+                            Title = _eventVM.Title,
+                            EventInfo = new EventInfoVM()
+                            {
+                                Description = _eventVM.EventInfo.Description,
+                                IsRepeated = true,
+                                RepeatInfo = null,
+                                EndTime = CalculateTimeSpanForEvent(_eventVM.EventInfo.EndTime, _eventVM.EventInfo.RepeatInfo.TypeRepeat, i + 1),
+                                StartTime = CalculateTimeSpanForEvent(_eventVM.EventInfo.StartTime, _eventVM.EventInfo.RepeatInfo.TypeRepeat, i + 1)
+
+
+                            }
+
+                        });
+                    }
+                }
+            }
+        }
+
+        private DateTime CalculateTimeSpanForEvent(DateTime dateEvent, TypeRepeat type, int numberOfRepeat)
+        {
+            DateTime date = DateTime.Parse(dateEvent.ToString());
+
+            switch (type)
+            {
+                case TypeRepeat.Week:
+
+                    return date.AddDays(7);
+
+                case TypeRepeat.Month:
+                    date.AddMonths(numberOfRepeat);
+                    return date;
+
+                case TypeRepeat.Year:
+                    date.AddYears(numberOfRepeat);
+                    return date;
+                default:
+                    throw new ArgumentException();
+
+            }
+
+        }
+
+        public async Task<List<EventVM>> GetEventsById(string Email, params int[] IdEvents)
+        {
+            using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
+            {
+                User user = await Database.UserManager.FindByEmailAsync(Email);
+                Calendar cal = user.UserCalendar;
+
+                if (cal == null)
+                {
+                    return null;
+                }
+
+                List<Event> events = cal.Events.
+                    Where(ev => IdEvents.First(idFromView => idFromView == ev.Id) == ev.Id)
+                    .ToList<Event>();
+
+                List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+
+                return _eventsVM;
+            }
+        }
 
     }
+    
 }

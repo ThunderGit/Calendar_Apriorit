@@ -2,26 +2,3 @@
 	ViewBag.Title = "Home Page";
 }
 
-@*<h2>@User.Identity.Name</h2>
-
-<li>@Html.ActionLink("Войти", "Login", "Account")</li>
-<li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
-
-<li>@Html.ActionLink("Выход", "Logout", "Account")</li>*@
-
-<ul class="nav navbar-nav navbar-right">
-	@if (!User.Identity.IsAuthenticated)
-	{
-		<li>@Html.ActionLink("Войти", "Login", "Account")</li>
-		<li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
-	}
-	else
-	{
-		<li>
-			<a>Привет @User.Identity.Name</a>
-		</li>
-		<li>@Html.ActionLink("Тест", "CreateNewEvent", "Calendar")</li>
-		<li>@Html.ActionLink("Выход", "Logout", "Account")</li>
-	}
-
-</ul>

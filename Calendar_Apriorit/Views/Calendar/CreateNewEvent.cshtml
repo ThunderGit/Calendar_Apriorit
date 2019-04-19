@@ -40,46 +40,31 @@
 		
 		<div id="hide" style="display:none" ;>
 			<div class="editor-label">
-				Месяц повтора
+				Тип повтора
 			</div>
 			<div class="editor-label">
-				<select id="Month">
-					<option value="Junuary">Junuary</option>
-					<option value="February">February</option>
-					<option value="Marth">Marth</option>
-					<option value="April">April</option>
-					<option value="May">May</option>
-					<option value="June">June</option>
-					<option value="Jule">Jule</option>
-					<option value="August">August</option>
-					<option value="September">September</option>
-					<option value="October">October</option>
-					<option value="November">November</option>
-					<option value="December">December</option>
-					<option selected value="">None</option>
+				<select id="TypeRepeat">
+					<option value="1">Week</option>
+					<option value="2">Month</option>
+					<option value="3">Year</option>
 				</select>
 			</div>
 			<div class="editor-label">
-				День повтора
+				Event is limited quanties repeats
 			</div>
 			<div class="editor-label">
-				<select id="DayRepeat">
-					<option value="Monday">Monday</option>
-					<option value="Tuesday">Tuesday</option>
-					<option value="Wendsday">Wendsday</option>
-					<option value="Thursday">Thursday</option>
-					<option value="Friday">Friday</option>
-					<option value="Saturday">Saturday</option>
-					<option value="Sunday">Sunday</option>
-					<option selected value="">None</option>
-				</select>
+				<input type="checkbox" onchange="document.getElementById('hide2').style.display = this.checked ? 'block' : 'none'" name="IsUnlimitedQuanties" id="IsUnlimitedQuanties" />
 			</div>
-			<div class="editor-label">
-				Количество повторов
+			<div id="hide2"  style="display:none";>
+				<div class="editor-label">
+					Количество повторов
+				</div>
+				<div class="editor-label">
+					<input type="number" id="QuantityRepeats" value="0"/>
+				</div>
+
 			</div>
-			<div class="editor-label">
-				<input type="number" id="QuantityRepeats" />
-			</div>
+			
 
 		</div>
 		<div class="editor-label">
@@ -98,7 +83,7 @@
 			if ($("#IsRepeated").prop("checked")) {
 				RepeatInfoVM = JSON.stringify({
 					'WeekDayForRepeat': $('#DayRepeat').val(),
-					'MonthForRepeat': $('#MonthRepeat').val(),
+					'TypeRepeat': $('#TypeRepeat').val(),
 					'QuantityRepeats': $('#QuantityRepeats').val(),
 				});
 				EventInfoVM = JSON.stringify({

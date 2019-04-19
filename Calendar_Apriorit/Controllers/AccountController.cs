@@ -37,7 +37,6 @@ namespace Calendar_Apriorit.Controllers
             {
                 using (var DomainUser = WebContext.Factory.GetService<IUserDM>(WebContext.RootContext))
                 {
-                    //UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
                     ClaimsIdentity claim = await DomainUser.Authenticate(model);
                     if (claim == null)
                     {

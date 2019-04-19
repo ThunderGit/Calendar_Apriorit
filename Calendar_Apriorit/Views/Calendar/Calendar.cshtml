@@ -17,9 +17,11 @@
 
 <script src="~/Scripts/Calendar.js"></script>
 <script type="text/javascript">
+
 	$(document).ready(function () {
 		$.ajax({
 			type: "POST",
+			//сделать гет
 			url: "/Calendar/ShowEvents",
 			data: {},
 			beforeSend: function () {

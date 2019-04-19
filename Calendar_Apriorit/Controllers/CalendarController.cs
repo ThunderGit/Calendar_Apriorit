@@ -50,9 +50,17 @@ namespace Calendar_Apriorit.Controllers
             }  
         }
 
-        public ActionResult EditEvent()
+        public async Task<ActionResult> EditEvent(int id)
         {
-            return View();
+            using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
+            {
+                var email2 = User.Identity.Name;
+                List<EventVM> Event = await  CalendarDomain.GetEventsById(email2, id);
+                if (Event.Count == 1)
+                    return View(Event[1]);
+                else return HttpNotFound();
+
+            }
         }
         [HttpPost]
         public async Task<string> EditEvent(string EventVM, string EventInfoVM, string RepeatInfoVM)

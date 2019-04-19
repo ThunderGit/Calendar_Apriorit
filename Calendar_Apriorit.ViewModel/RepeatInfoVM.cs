@@ -1,4 +1,11 @@
 ﻿using System.Runtime.Serialization;
+ public enum TypeRepeat : byte
+    {
+         Week = 1,
+         Month = 2,
+         Year = 3
+        
+    }
 
 namespace Calendar_Apriorit.ViewModel
 {
@@ -6,15 +13,10 @@ namespace Calendar_Apriorit.ViewModel
     public class RepeatInfoVM
     {
         [DataMember]
-
-        public string WeekDayForRepeat { get; set; }
+        public TypeRepeat TypeRepeat { get; set; }
         [DataMember]
-        public string MonthForRepeat { get; set; }
-        [DataMember]
-
         public bool IsUnlimitedQuanties { get; set; }
         [DataMember]
-
         public int QuantityRepeats { get; set; }
     }
 }

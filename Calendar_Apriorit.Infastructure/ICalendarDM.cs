@@ -13,6 +13,7 @@ namespace Calendar_Apriorit.Infastructure
         Task<OperationDetails> AddNewEvent(EventVM eventVM, string EMail);
         Task<OperationDetails> EditEvent(EventVM eventVM, string EMail);
         Task<List<EventVM>> GetEvents(string EMail);
+        Task<List<EventVM>> GetEventsById(string Email, params int[] IdEvents);
 
 
     }
