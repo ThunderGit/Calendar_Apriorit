@@ -30,11 +30,11 @@ $(function () {
         calendar_header.css("background-color", "#27ae60").find("h1").text(MONTHS[Month - 1] + " " + Year);
         calendar_weekdays.find("div").css("color", "#27ae60");
         calendar_content.find(".today").css("background-color", "#0000ff");
-        for (var i = 0; i < MonthLength; i++) {
+        /*for (var i = 0; i < MonthLength; i++) {
             calendar_content.find("#DAY" + (i + 1) + "").css("background-color", "#ff0000");
             calendar_content.find("#DAY" + (i + 1) + "").text((i + 1) + "\n Hello");
 
-        }
+        }*/
         // calendar_content.find("#DAY23").css("background-color", "#ff0000");
         calendar_content.find("#DAY23").css("innerHTML", "HI");
         SetCSS();
