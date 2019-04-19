@@ -23,7 +23,7 @@ $(function () {
                     var u = false;
                     calendar_content.empty();
                     while (!u) {
-                        if (DayOfWeek[DayOfWeek_INDEX] == Days[0].weekday) {
+                        if (DayOfWeek[DayOfWeek_INDEX] == Days[6].weekday) {
                             u = true;
                         }
                         else {
@@ -52,7 +52,11 @@ $(function () {
                         
                         calendar_content.find('#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
                             '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY")).text(Events[i].EventInfo.Description);
+                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY")).text(moment(Events[i].EventInfo.StartTime).format("D")+" "+Events[i].EventInfo.Description);
+
+                        calendar_content.find('#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
+                            '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
+                            '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY")).text(moment(Events[i].EventInfo.EndTime).format("D")+" "+Events[i].EventInfo.Description);
                     }
 
                     SetCSS();
@@ -118,7 +122,7 @@ $(function () {
                 var Month = 9;
                 var r = [];
                 var MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-                var DayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                var DayOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
                 var MonthColor = ["#16a085", "#1abc9c", "#c0392b", "#27ae60", "#FF6860", "#f39c12", "#f1c40f", "#e67e22", "#2ecc71", "#e74c3c", "#d35400", "#2c3e50"];
                 var Calendar = $("#calendar");
                 var calendar_header = Calendar.find("#calendar_header");
