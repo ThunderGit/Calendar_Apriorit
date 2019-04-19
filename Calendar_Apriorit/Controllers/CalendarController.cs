@@ -105,7 +105,7 @@ namespace Calendar_Apriorit.Controllers
 
             return model;
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<JsonResult> ShowEvents()
         {
             using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
