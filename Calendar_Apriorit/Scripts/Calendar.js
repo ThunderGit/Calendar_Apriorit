@@ -1,147 +1,132 @@
-$(function ()
-{
-	function c()
-	{
-		p();
-		var e = h();
-		var r = 0;
-		var u = false;
-		l.empty();
-		while (!u)
-		{
-			if (s[r] == e[0].weekday)
-			{
-				u = true
-			}
-			else
-			{
-				l.append('<div class="blank"></div>');
-				r++
-			}
-		}
-		for (var c = 0; c < 42 - r; c++)
-		{
-			if (c >= e.length)
-			{
-				l.append('<div class="blank"></div>')
-			}
-			else
-			{
-				var v = e[c].day;
-				var m = g(new Date(t, n - 1, v)) ? '<div class="today">' : "<div>";
-				l.append(m + "" + v + "</div>")
-			}
-		}
-		var y = o[n - 1];
-		a.css("background-color", y).find("h1").text(i[n - 1] + " " + t);
-		f.find("div").css("color", y);
-		l.find(".today").css("background-color", y);
-		d()
-	}
+$(function () {
+    
+    function MainFunction() {
+        SetWeekdays();
+        var Days = SetDays();
+        var DayOfWeek_INDEX = 0;
+        var u = false;
+        calendar_content.empty();
+        while (!u) {
+            if (DayOfWeek[DayOfWeek_INDEX] == Days[0].weekday) {
+                u = true;
+            }
+            else {
+                calendar_content.append('<div class="blank"></div>');
+                DayOfWeek_INDEX++;
+            }
+        }
+        var MonthLength = Days.length;
+        for (var i = 0; i < 42 - DayOfWeek_INDEX; i++) {
+            if (i >= Days.length) {
+                calendar_content.append('<div class="blank"></div>')
+            }
+            else {
+                var Day = Days[i].day;
+                var m = CheckNewdate(new Date(Year, Month - 1, Day)) ? '<div id="DAY' + (i + 1) + '" class="today">' : '<div id="DAY' + (i + 1) + '">';
+                calendar_content.append(m + "" + Day + "</div>");
+            }
+        }
+        var y = MonthColor[Month - 1];
+        calendar_header.css("background-color", "#27ae60").find("h1").text(MONTHS[Month - 1] + " " + Year);
+        calendar_weekdays.find("div").css("color", "#27ae60");
+        calendar_content.find(".today").css("background-color", "#0000ff");
+        /*for (var i = 0; i < MonthLength; i++) {
+            calendar_content.find("#DAY" + (i + 1) + "").css("background-color", "#ff0000");
+            calendar_content.find("#DAY" + (i + 1) + "").text((i + 1) + "\n Hello");
 
-	function h()
-	{
-		var e = [];
-		for (var r = 1; r < v(t, n) + 1; r++)
-		{
-			e.push(
-			{
-				day: r,
-				weekday: s[m(t, n, r)]
-			})
-		}
-		return e
-	}
+        }*/
+        // calendar_content.find("#DAY23").css("background-color", "#ff0000");
+        calendar_content.find("#DAY23").css("innerHTML", "HI");
+        SetCSS();
+    }
 
-	function p()
-	{
-		f.empty();
-		for (var e = 0; e < 7; e++)
-		{
-			f.append("<div>" + s[e].substring(0, 3) + "</div>")
-		}
-	}
+    function SetDays() {
+        var e = [];
+        for (var i = 1; i < GetNewdateDate(Year, Month) + 1; i++) {
+            e.push(
+                {
+                    day: i,
+                    weekday: DayOfWeek[GetNewdateDay(Year, Month, i)]
+                })
+        }
+        return e;
+    }
 
-	function d()
-	{
-		var t;
-		var n = $("#calendar").css("width", e + "px");
-		n.find(t = "#calendar_weekdays, #calendar_content").css("width", e + "px").find("div").css(
-		{
-			width: e / 7 + "px",
-			height: e / 7 + "px",
-			"line-height": e / 7 + "px"
-		});
-		n.find("#calendar_header").css(
-		{
-			height: e * (1 / 7) + "px"
-		}).find('i[class^="icon-chevron"]').css("line-height", e * (1 / 7) + "px")
-	}
+    function SetWeekdays() {
+        calendar_weekdays.empty();
+        for (var i = 0; i < 7; i++) {
+            calendar_weekdays.append("<div>" + DayOfWeek[i].substring(0, 3) + "</div>")
+        }
+    }
 
-	function v(e, t)
-	{
-		return (new Date(e, t, 0)).getDate()
-	}
+    function SetCSS() {
+        var CalendarElementsIDs;
+        var CalendarStyle = $("#calendar").css("width", e + "px");
+        CalendarStyle.find(CalendarElementsIDs = "#calendar_weekdays, #calendar_content").css("width", e + "px").find("div").css(
+            {
+                width: e / 7 + "px",
+                height: e / 7 + "px",
+                "line-height": e / 7 + "px"
+            });
+        CalendarStyle.find("#calendar_header").css(
+            {
+                height: e * (1 / 7) + "px"
+            }).find('a[class^="icon-chevron"]').css("line-height", e * (1 / 7) + "px")
+    }
 
-	function m(e, t, n)
-	{
-		return (new Date(e, t - 1, n)).getDay()
-	}
+    function GetNewdateDate(year, month) {
+        return (new Date(year, month, 0)).getDate();
+    }
 
-	function g(e)
-	{
-		return y(new Date) == y(e)
-	}
+    function GetNewdateDay(year, month, day) {
+        return (new Date(year, month - 1, day)).getDay();
+    }
 
-	function y(e)
-	{
-		return e.getFullYear() + "/" + (e.getMonth() + 1) + "/" + e.getDate()
-	}
+    function CheckNewdate(date) {
+        return GetFullDate(new Date) == GetFullDate(date)
+    }
 
-	function b()
-	{
-		var e = new Date;
-		t = e.getFullYear();
-		n = e.getMonth() + 1
-	}
-	var e = 480;
-	var t = 2013;
-	var n = 9;
-	var r = [];
-	var i = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-	var s = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-	var o = ["#16a085", "#1abc9c", "#c0392b", "#27ae60", "#FF6860", "#f39c12", "#f1c40f", "#e67e22", "#2ecc71", "#e74c3c", "#d35400", "#2c3e50"];
-	var u = $("#calendar");
-	var a = u.find("#calendar_header");
-	var f = u.find("#calendar_weekdays");
-	var l = u.find("#calendar_content");
-	b();
-	c();
-	a.find('i[class^="icon-chevron"]').on("click", function ()
-	{
-		var e = $(this);
-		var r = function (e)
-		{
-			n = e == "next" ? n + 1 : n - 1;
-			if (n < 1)
-			{
-				n = 12;
-				t--
-			}
-			else if (n > 12)
-			{
-				n = 1;
-				t++
-			}
-			c()
-		};
-		if (e.attr("class").indexOf("left") != -1)
-		{
-			r("previous")
-		}
-		else
-		{
-			r("next")
-		}
-	})
-})
+    function GetFullDate(date) {
+        return date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
+    }
+
+    function SetDate() {
+        var date = new Date;
+        Year = date.getFullYear();
+        Month = date.getMonth() + 1;
+    }
+    var e = 480;
+    var Year = 2013;
+    var Month = 9;
+    var r = [];
+    var MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+    var DayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var MonthColor = ["#16a085", "#1abc9c", "#c0392b", "#27ae60", "#FF6860", "#f39c12", "#f1c40f", "#e67e22", "#2ecc71", "#e74c3c", "#d35400", "#2c3e50"];
+    var Calendar = $("#calendar");
+    var calendar_header = Calendar.find("#calendar_header");
+    var calendar_weekdays = Calendar.find("#calendar_weekdays");
+    var calendar_content = Calendar.find("#calendar_content");
+    SetDate();
+    MainFunction();
+    calendar_header.find('a[class^="icon-chevron"]').on("click", function () {
+        var direction = $(this);
+        var SurfDirection = function (direction) {
+            Month = direction == "next" ? Month + 1 : Month - 1;
+            if (Month < 1) {
+                Month = 12;
+                Year--;
+            }
+            else if (Month > 12) {
+                Month = 1;
+                Year++;
+            }
+            MainFunction();
+        };
+        if (direction.attr("class").indexOf("left") != -1) {
+            SurfDirection("previous");
+        }
+        else {
+            SurfDirection("next");
+        }
+    })
+});

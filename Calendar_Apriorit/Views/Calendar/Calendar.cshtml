@@ -1,48 +1,47 @@
-﻿@model Calendar_Apriorit.ViewModel.EventVM
-
+@model Calendar_Apriorit.ViewModel.EventVM
 @{
-	ViewBag.Title = "Calendar";
+    ViewBag.Title = "Calendar";
 }
-<link rel='stylesheet prefetch' href='~/Content/font-awesome.css'>
+<head>
 
+<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css' />
 <link rel="stylesheet" href="~/Content/calendar_style.css">
 
-<link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+</head>
 
-<div id="calendar">
-	<div id="calendar_header"><i class="icon-chevron-left"></i>          <h1></h1><i class="icon-chevron-right"></i>         </div>
-	<div id="calendar_weekdays"></div>
-	<div id="calendar_content"></div>
-</div>
-
-<script src="~/Scripts/Calendar.js"></script>
-<script type="text/javascript">
-
-	$(document).ready(function () {
-		$.ajax({
-			type: "POST",
-			//сделать гет
-			url: "/Calendar/ShowEvents",
-			data: {},
-			beforeSend: function () {
+<body>
+    <div id="calendar">
+        <div id="calendar_header"><a class="icon-chevron-left">&lt</a>  <h1></h1><a class="icon-chevron-right">&gt</a>         </div>
+        <div id="calendar_weekdays"></div>
+        <div id="calendar_content"></div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Calendar/ShowEvents",
+                data: {},
+                beforeSend: function () {
 
 
-			},
-			success: function (response) {
-				
-				alert("Sucsses");
-				console.log(response);
+                },
+                success: function (response) {
+
+                    alert("Succses");
+                    console.log(response);
 
 
-			},
-			failure: function (response) {
-				alert(response.responseText);
-			},
-			error: function (response) {
-				alert(response.responseText);
-			}
-		});
-	});
-</script>
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+    </script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="~/Scripts/Calendar.js"></script>
 
-
+</body>
