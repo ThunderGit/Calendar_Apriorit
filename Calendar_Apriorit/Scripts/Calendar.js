@@ -73,7 +73,7 @@ $(function () {
                         //    var modal = document.getElementById('myModal');
                         //    var span = document.getElementsByClassName("close")[0];
                         //    modal.style.display = "block";
-                        //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDstart).text();
+                        //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDstart).text().slice(calendar_content.find(IDstart).text().indexOf('\n'), calendar_content.find(IDstart).text().length);
                         //    span.onclick = function ()
                         //    {
                         //        modal.style.display = "none";
@@ -87,7 +87,7 @@ $(function () {
                             //    var modal = document.getElementById('myModal');
                             //    var span = document.getElementsByClassName("close")[0];
                             //    modal.style.display = "block";
-                            //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDend).text();
+                            //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDend).text().slice(calendar_content.find(IDend).text().indexOf('\n'), calendar_content.find(IDend).text().length);
                             //    span.onclick = function ()
                             //    {
                             //        modal.style.display = "none";
@@ -170,25 +170,25 @@ $(function () {
                 MainFunction();
                 alert(DaysID);
                 DaysID = jQuery.unique(DaysID);
-                for (var i = 0; i < DaysID.length-1; ++i)
-                {
+                //for (var i = 0; i < DaysID.length-1; ++i)
+                //{
 
-                    //alert(calendar_content.find(DaysID[i]).text());
-                    calendar_content.find(DaysID[i]).on("click", function () {
-                        var modal = document.getElementById('myModal');
-                        var span = document.getElementsByClassName("close")[0];
-                        modal.style.display = "block";
-                        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
-                        span.onclick = function () {
-                            modal.style.display = "none";
-                        }
-                        window.onclick = function (event) {
-                            if (event.target == modal) {
-                                modal.style.display = "none";
-                            }
-                        }
-                    })
-                }
+                //    //alert(calendar_content.find(DaysID[i]).text());
+                //    calendar_content.find(DaysID[i]).on("click", function () {
+                //        var modal = document.getElementById('myModal');
+                //        var span = document.getElementsByClassName("close")[0];
+                //        modal.style.display = "block";
+                //        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
+                //        span.onclick = function () {
+                //            modal.style.display = "none";
+                //        }
+                //        window.onclick = function (event) {
+                //            if (event.target == modal) {
+                //                modal.style.display = "none";
+                //            }
+                //        }
+                //    })
+                //}
                 //calendar_content.find("#DAY27-MONTH4-YEAR2019").on("click", function () {
                 //    alert("Hello");
                 //});
