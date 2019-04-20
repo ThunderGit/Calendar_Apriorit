@@ -11,11 +11,15 @@ $(function () {
             success: function (response) {
                 
                 Events = response;
-                //for (var i = 0; i < response.length; i++) {
-                //    response[i].EventInfo.StartTime = moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY");
-                //    response[i].EventInfo.EndTime = moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY");
-                //}
+                for (var i = 0; i < response.length; i++) {
+                    //response[i].EventInfo.StartTime = moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, hh:mm:ss");
+                    //response[i].EventInfo.EndTime = moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, hh:mm:ss");
+                    
+                    //alert(response[i].EventInfo.StartTime);
+                                       
+                }
                 console.log(Events);
+                
 
                 function MainFunction() {
                     //alert(Events);
@@ -55,14 +59,15 @@ $(function () {
                     
                     for (var i = 0; i < Events.length; i++)
                     {
-
                         ShowEvents(Events, i);
                     }
 
                     SetCSS();
                 }
 
+                //Вывод ивентов в календарь и в модалку
                 function ShowEvents(Events, i) {
+                   
                     var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
                         '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
                         '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
@@ -72,18 +77,41 @@ $(function () {
                     var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
                         '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
                         '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
-
+                    //alert(IDstart+"-"+ IDend);
                     var Text2 = $(IDend).text();
                     $(IDstart).text(Text1 + "\n" + Events[i].Title);
                     $(IDend).text(Text2 + "\n" + Events[i].Title);
+                   
+                    SetEventOnCalendarAndModal(IDstart, IDstart);
+                    SetEventOnCalendarAndModal(IDend, IDend);
                     
-                    $(IDstart).on('click', function (event) {
+                    if (IDstart.localeCompare(IDend) != 0)//Если ивент на несколько дней, заполняем даты от начальной до конечной
+                    {
+                        var Begin = new Date(moment(Events[i].EventInfo.StartTime).format("MMMM D,YYYY"));
+                        Begin.setDate(Begin.getDate() + 1);
+                        var End = new Date(moment(Events[i].EventInfo.EndTime).format("MMMM D,YYYY"));
+                        for (Begin,End;Begin < End; Begin.setDate(Begin.getDate() + 1))
+                        {
+                            
+                            var ID = '#DAY' + moment(Begin).format("D") +
+                                '-MONTH' + moment(Begin).format("M") +
+                                '-YEAR' + moment(Begin).format("YYYY");
+                            var Text = $(ID).text();
+                            $(ID).text(Text + "\n" + Events[i].Title);
+
+                            SetEventOnCalendarAndModal(ID, IDend);
+                        }
+                    }
+                }
+                function SetEventOnCalendarAndModal(Id1, Id2) {//Вывод ивента(ов) в календарь и в модальное окно
+                    $(Id1).on('click', function (event) {
                         $(event.currentTarget).data(
                             "Event",
                             {
-                                Title: $(IDstart).text().
-                                    slice($(IDstart).text().indexOf('\n'), $(IDstart).text().length)
+                                Title: $(Id2).text().
+                                    slice($(Id2).text().indexOf('\n'), $(Id2).text().length)
                             });
+
                         var eventData = $(event.currentTarget).data("Event").Title;
                         var modal = document.getElementById('myModal');
                         var span = document.getElementsByClassName("close")[0];
@@ -93,25 +121,6 @@ $(function () {
                             modal.style.display = "none";
                         }
                     })
-
-                    if (IDstart !== IDend) {
-                        $(IDend).on('click', function (event) {
-                            $(event.currentTarget).data(
-                                "Event",
-                                {
-                                    Title: $(IDend).text().
-                                        slice($(IDend).text().indexOf('\n'), $(IDend).text().length)
-                                });
-                            var eventData = $(event.currentTarget).data("Event").Title;
-                            var modal = document.getElementById('myModal');
-                            var span = document.getElementsByClassName("close")[0];
-                            modal.style.display = "block";
-                            document.getElementById("ModalText").innerHTML = eventData;
-                            span.onclick = function () {
-                                modal.style.display = "none";
-                            }
-                        })
-                    }
                 }
                 function SetDays() {
                     var e = [];
