@@ -17,6 +17,8 @@ namespace Calendar_Apriorit
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //RouteTable.Routes.MapHubs();
+
             ModelMapper.Init();
 
         }

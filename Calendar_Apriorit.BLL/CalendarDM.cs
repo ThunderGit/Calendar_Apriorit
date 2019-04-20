@@ -198,7 +198,7 @@ namespace Calendar_Apriorit.BLL
             {
                 case TypeRepeat.Week:
 
-                    return date.AddDays(7);
+                    return date.AddDays(7*numberOfRepeat);
 
                 case TypeRepeat.Month:
                     date.AddMonths(numberOfRepeat);
