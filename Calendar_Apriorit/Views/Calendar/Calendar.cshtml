@@ -11,37 +11,15 @@
 
 <body>
     <div id="calendar">
-        <div id="calendar_header"><a class="icon-chevron-left">&lt</a>  <h1></h1><a class="icon-chevron-right">&gt</a>         </div>
+        <div id="calendar_header">
+            <a class="icon-chevron-left">&lt</a>  
+                <h1></h1>
+            <a class="icon-chevron-right">&gt</a>
+        </div>
         <div id="calendar_weekdays"></div>
         <div id="calendar_content"></div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: "/Calendar/ShowEvents",
-                data: {},
-                beforeSend: function () {
-
-
-                },
-                success: function (response) {
-
-                    alert("Succses");
-                    console.log(response);
-
-
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        });
-    </script>
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    
     <script src="~/Scripts/Calendar.js"></script>
-
+    <script src="~/Scripts/moment.js"></script>
 </body>
