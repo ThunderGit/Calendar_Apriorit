@@ -1,5 +1,6 @@
 $(function () {
     var Events;
+    var DaysID = [];
     $(document).ready(function () {
         $.ajax({
             type: "POST",
@@ -9,14 +10,12 @@ $(function () {
                 
             },
             success: function (response) {
-           
-                //alert("Success");
                 
                 Events = response;
                 console.log(Events);
 
                 function MainFunction() {
-                   
+                    //alert(Events);
                     SetWeekdays();
                     var Days = SetDays();
                     var DayOfWeek_INDEX = 0;
@@ -47,16 +46,55 @@ $(function () {
                     var y = MonthColor[Month - 1];
                     calendar_header.css("background-color", "#27ae60").find("h1").text(MONTHS[Month - 1] + " " + Year);
                     calendar_weekdays.find("div").css("color", "#27ae60");
+                    calendar_content.find("div").css("cursor", "pointer");
                     calendar_content.find(".today").css("background-color", "#0000ff");
-                    for (var i = 0; i < Events.length; i++) {
-                        
-                        calendar_content.find('#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
+                    
+                    for (var i = 0; i < Events.length; i++)
+                    {
+                        var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
                             '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY")).text(moment(Events[i].EventInfo.StartTime).format("D")+" "+Events[i].EventInfo.Description);
+                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
 
-                        calendar_content.find('#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
+                        var Text1 = calendar_content.find(IDstart).text();
+
+                        var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
                             '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY")).text(moment(Events[i].EventInfo.EndTime).format("D")+" "+Events[i].EventInfo.Description);
+                            '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
+
+                        var Text2 = calendar_content.find(IDend).text();
+                        calendar_content.find(IDstart).text(Text1+"\n"+Events[i].Title);
+                        calendar_content.find(IDend).text(Text2 + "\n" + Events[i].Title);
+
+                        DaysID.push(IDstart);
+                        //calendar_content.find(IDstart).on("click", function () {
+
+                        //    //alert(calendar_content.find(IDstart).text());
+                           
+                        //    var modal = document.getElementById('myModal');
+                        //    var span = document.getElementsByClassName("close")[0];
+                        //    modal.style.display = "block";
+                        //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDstart).text();
+                        //    span.onclick = function ()
+                        //    {
+                        //        modal.style.display = "none";
+                        //    }
+                        //})
+
+                        if (IDstart !== IDend) {
+                            //calendar_content.find(IDend).on("click", function () {
+
+                            //    //alert(calendar_content.find(IDend).text());
+                            //    var modal = document.getElementById('myModal');
+                            //    var span = document.getElementsByClassName("close")[0];
+                            //    modal.style.display = "block";
+                            //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDend).text();
+                            //    span.onclick = function ()
+                            //    {
+                            //        modal.style.display = "none";
+                            //    }
+                            //})
+                            DaysID.push(IDend);
+                        }
                     }
 
                     SetCSS();
@@ -130,6 +168,30 @@ $(function () {
                 var calendar_content = Calendar.find("#calendar_content");
                 SetDate();
                 MainFunction();
+                alert(DaysID);
+                DaysID = jQuery.unique(DaysID);
+                for (var i = 0; i < DaysID.length-1; ++i)
+                {
+
+                    //alert(calendar_content.find(DaysID[i]).text());
+                    calendar_content.find(DaysID[i]).on("click", function () {
+                        var modal = document.getElementById('myModal');
+                        var span = document.getElementsByClassName("close")[0];
+                        modal.style.display = "block";
+                        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text();
+                        span.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                        window.onclick = function (event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+                    })
+                }
+                //calendar_content.find("#DAY27-MONTH4-YEAR2019").on("click", function () {
+                //    alert("Hello");
+                //});
                 calendar_header.find('a[class^="icon-chevron"]').on("click", function () {
                     var direction = $(this);
                     var SurfDirection = function (direction) {
