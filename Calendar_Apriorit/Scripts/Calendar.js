@@ -1,6 +1,5 @@
 $(function () {
     var Events;
-    var DaysID = [];
     $(document).ready(function () {
         $.ajax({
             type: "POST",
@@ -12,7 +11,10 @@ $(function () {
             success: function (response) {
                 
                 Events = response;
-               
+                //for (var i = 0; i < response.length; i++) {
+                //    response[i].EventInfo.StartTime = moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY");
+                //    response[i].EventInfo.EndTime = moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY");
+                //}
                 console.log(Events);
 
                 function MainFunction() {
@@ -53,55 +55,64 @@ $(function () {
                     
                     for (var i = 0; i < Events.length; i++)
                     {
-                        var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
-                            '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
 
-                        var Text1 = calendar_content.find(IDstart).text();
-
-                        var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
-                            '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
-
-                        var Text2 = calendar_content.find(IDend).text();
-                        calendar_content.find(IDstart).text(Text1+"\n"+Events[i].Title);
-                        calendar_content.find(IDend).text(Text2 + "\n" + Events[i].Title);
-
-                        DaysID.push(IDstart);
-                        calendar_content.find(IDstart).on("click", function () {
-
-                           //alert(calendar_content.find(IDstart).text());
-                           
-                            var modal = document.getElementById('myModal');
-                            var span = document.getElementsByClassName("close")[0];
-                            modal.style.display = "block";
-                            document.getElementById("ModalText").innerHTML = calendar_content.find(IDstart).text().slice(calendar_content.find(IDstart).text().indexOf('\n'), calendar_content.find(IDstart).text().length);
-                            span.onclick = function ()
-                            {
-                                modal.style.display = "none";
-                            }
-                        })
-
-                        if (IDstart !== IDend) {
-                            calendar_content.find(IDend).on("click", function () {
-
-                                //alert(calendar_content.find(IDend).text());
-                                var modal = document.getElementById('myModal');
-                                var span = document.getElementsByClassName("close")[0];
-                                modal.style.display = "block";
-                                document.getElementById("ModalText").innerHTML = calendar_content.find(IDend).text().slice(calendar_content.find(IDend).text().indexOf('\n'), calendar_content.find(IDend).text().length);
-                                span.onclick = function ()
-                                {
-                                    modal.style.display = "none";
-                                }
-                            })
-                            DaysID.push(IDend);
-                        }
+                        ShowEvents(Events, i);
                     }
 
                     SetCSS();
                 }
 
+                function ShowEvents(Events, i) {
+                    var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
+                        '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
+                        '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
+
+                    var Text1 = $(IDstart).text();
+
+                    var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
+                        '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
+                        '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
+
+                    var Text2 = $(IDend).text();
+                    $(IDstart).text(Text1 + "\n" + Events[i].Title);
+                    $(IDend).text(Text2 + "\n" + Events[i].Title);
+                    
+                    $(IDstart).on('click', function (event) {
+                        $(event.currentTarget).data(
+                            "Event",
+                            {
+                                Title: $(IDstart).text().
+                                    slice($(IDstart).text().indexOf('\n'), $(IDstart).text().length)
+                            });
+                        var eventData = $(event.currentTarget).data("Event").Title;
+                        var modal = document.getElementById('myModal');
+                        var span = document.getElementsByClassName("close")[0];
+                        modal.style.display = "block";
+                        document.getElementById("ModalText").innerHTML = eventData;
+                        span.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                    })
+
+                    if (IDstart !== IDend) {
+                        $(IDend).on('click', function (event) {
+                            $(event.currentTarget).data(
+                                "Event",
+                                {
+                                    Title: $(IDend).text().
+                                        slice($(IDend).text().indexOf('\n'), $(IDend).text().length)
+                                });
+                            var eventData = $(event.currentTarget).data("Event").Title;
+                            var modal = document.getElementById('myModal');
+                            var span = document.getElementsByClassName("close")[0];
+                            modal.style.display = "block";
+                            document.getElementById("ModalText").innerHTML = eventData;
+                            span.onclick = function () {
+                                modal.style.display = "none";
+                            }
+                        })
+                    }
+                }
                 function SetDays() {
                     var e = [];
                     for (var i = 1; i < GetNewdateDate(Year, Month) + 1; i++) {
@@ -170,41 +181,7 @@ $(function () {
                 var calendar_content = Calendar.find("#calendar_content");
                 SetDate();
                 MainFunction();
-                alert(DaysID);
-                DaysID = jQuery.unique(DaysID);
-                //for (var i = 0; i < DaysID.length; ++i)
-                //{
-
-                //    //alert(calendar_content.find(DaysID[i]).text());
-                //    calendar_content.find(DaysID[i]).on("click", function () {
-                //        var modal = document.getElementById('myModal');
-                //        var span = document.getElementsByClassName("close")[0];
-                //        modal.style.display = "block";
-                //        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
-                //        span.onclick = function () {
-                //            modal.style.display = "none";
-                //        }
-                //        window.onclick = function (event) {
-                //            if (event.target == modal) {
-                //                modal.style.display = "none";
-                //            }
-                //        }
-                //    })
-                //}
-                calendar_content.find("#DAY5-MONTH4-YEAR2019").on("click", function () {
-                    var modal = document.getElementById('myModal');
-                        var span = document.getElementsByClassName("close")[0];
-                        modal.style.display = "block";
-                    document.getElementById('ModalText').innerHTML = "Hello";
-                        span.onclick = function () {
-                            modal.style.display = "none";
-                        }
-                        window.onclick = function (event) {
-                            if (event.target == modal) {
-                                modal.style.display = "none";
-                            }
-                        }
-                });
+                
                 calendar_header.find('a[class^="icon-chevron"]').on("click", function () {
                     var direction = $(this);
                     var SurfDirection = function (direction) {
