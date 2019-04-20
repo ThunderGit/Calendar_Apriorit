@@ -49,6 +49,8 @@ $(function () {
                     calendar_content.find("div").css("cursor", "pointer");
                     calendar_content.find(".today").css("background-color", "#0000ff");
                     
+                    
+                    //Вывод ивентов в модалку (Вариант 1)
                     for (var i = 0; i < Events.length; i++)
                     {
                         var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
@@ -170,25 +172,26 @@ $(function () {
                 MainFunction();
                 alert(DaysID);
                 DaysID = jQuery.unique(DaysID);
-                //for (var i = 0; i < DaysID.length-1; ++i)
-                //{
+                 //Вывод ивентов в модалку (Вариант 2)
+                  for (var i = 0; i < DaysID.length-1; ++i)
+                  {
 
-                //    //alert(calendar_content.find(DaysID[i]).text());
-                //    calendar_content.find(DaysID[i]).on("click", function () {
-                //        var modal = document.getElementById('myModal');
-                //        var span = document.getElementsByClassName("close")[0];
-                //        modal.style.display = "block";
-                //        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
-                //        span.onclick = function () {
-                //            modal.style.display = "none";
-                //        }
-                //        window.onclick = function (event) {
-                //            if (event.target == modal) {
-                //                modal.style.display = "none";
-                //            }
-                //        }
-                //    })
-                //}
+                     //alert(calendar_content.find(DaysID[i]).text());
+                      calendar_content.find(DaysID[i]).on("click", function () {
+                          var modal = document.getElementById('myModal');
+                          var span = document.getElementsByClassName("close")[0];
+                          modal.style.display = "block";
+                         document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
+                         span.onclick = function () {
+                              modal.style.display = "none";
+                          }
+                          window.onclick = function (event) {
+                              if (event.target == modal) {
+                                  modal.style.display = "none";
+                              }
+                        }
+                    })
+                }
                 //calendar_content.find("#DAY27-MONTH4-YEAR2019").on("click", function () {
                 //    alert("Hello");
                 //});
