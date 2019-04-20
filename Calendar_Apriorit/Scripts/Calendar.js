@@ -178,7 +178,7 @@ $(function () {
                         var modal = document.getElementById('myModal');
                         var span = document.getElementsByClassName("close")[0];
                         modal.style.display = "block";
-                        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text();
+                        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
                         span.onclick = function () {
                             modal.style.display = "none";
                         }
