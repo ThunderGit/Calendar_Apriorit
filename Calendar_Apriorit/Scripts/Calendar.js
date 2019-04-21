@@ -73,18 +73,48 @@ $(function () {
                         '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
 
                     var Text1 = $(IDstart).text();
-
+                    var EventModal = "<table><tr><th>" + Events[i].Title +
+                        " </th></tr> <tr><td>" + Events[i].EventInfo.Description +
+                        " </td></tr> <tr><td> Start:&nbsp &nbsp" + moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, HH:mm") +
+                        " </td></tr> <tr><td> Finish: " + moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, HH:mm") +
+                        " </td></tr></table> <br/><br/>";
+                    //alert(EventModal);
+                    //alert(EventModal.slice(EventModal.indexOf(Events[i].Title), EventModal.indexOf(' '));
                     var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
                         '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
                         '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
-                    //alert(IDstart+"-"+ IDend);
+                    
                     var Text2 = $(IDend).text();
+
                     $(IDstart).text(Text1 + "\n" + Events[i].Title);
                     $(IDend).text(Text2 + "\n" + Events[i].Title);
+
+                    if ($(IDstart).data("Info") !== undefined &&
+                        $(IDstart).data("Info").Modal !== EventModal.slice(EventModal.indexOf('<'), EventModal.length))
+                    {
+                        $(IDstart).data("Info", {
+                            Modal: $(IDstart).data("Info").Modal + EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    else {
+                        $(IDstart).data("Info", {
+                            Modal: EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    if ($(IDend).data("Info") !== undefined &&
+                        $(IDend).data("Info").Modal !== EventModal.slice(EventModal.indexOf('<'), EventModal.length)) {
+                        $(IDend).data("Info", {
+                            Modal: $(IDend).data("Info").Modal +EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    else {
+                        $(IDend).data("Info", {
+                            Modal: EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
                    
                     SetEventOnCalendarAndModal(IDstart, IDstart);
                     SetEventOnCalendarAndModal(IDend, IDend);
-                    
                     if (IDstart.localeCompare(IDend) != 0)//Если ивент на несколько дней, заполняем даты от начальной до конечной
                     {
                         var Begin = new Date(moment(Events[i].EventInfo.StartTime).format("MMMM D,YYYY"));
@@ -97,22 +127,16 @@ $(function () {
                                 '-MONTH' + moment(Begin).format("M") +
                                 '-YEAR' + moment(Begin).format("YYYY");
                             var Text = $(ID).text();
-                            $(ID).text(Text + "\n" + Events[i].Title);
 
+                            $(ID).text(Text + "\n" + Events[i].Title);
                             SetEventOnCalendarAndModal(ID, IDend);
                         }
                     }
                 }
                 function SetEventOnCalendarAndModal(Id1, Id2) {//Вывод ивента(ов) в календарь и в модальное окно
                     $(Id1).on('click', function (event) {
-                        $(event.currentTarget).data(
-                            "Event",
-                            {
-                                Title: $(Id2).text().
-                                    slice($(Id2).text().indexOf('\n'), $(Id2).text().length)
-                            });
 
-                        var eventData = $(event.currentTarget).data("Event").Title;
+                        var eventData = $(Id2).data("Info").Modal;
                         var modal = document.getElementById('myModal');
                         var span = document.getElementsByClassName("close")[0];
                         modal.style.display = "block";
