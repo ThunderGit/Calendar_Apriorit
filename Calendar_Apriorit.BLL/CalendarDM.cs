@@ -46,9 +46,13 @@ namespace Calendar_Apriorit.BLL
 
         private bool IsEventSatisfiesSchedule(DateTime start, DateTime end, Calendar cal)
         {
+            List<Event> events = cal.Events.ToList<Event>();
+            List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+            List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
+            MultiplyRepeatEvents(_eventsVM, RepeatEvents);
 
-            bool IsAnyEventsThatStartsBetweenStartAndEndTime = cal.Events.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList().Count() > 0;
-            bool IsAnyEventsThatEndsBetweenStartAndEndTime = cal.Events.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList().Count() > 0;
+            bool IsAnyEventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList().Count() > 0;
+            bool IsAnyEventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList().Count() > 0;
             if (IsAnyEventsThatStartsBetweenStartAndEndTime || IsAnyEventsThatEndsBetweenStartAndEndTime)
                 return false;
             else return true;
@@ -98,6 +102,36 @@ namespace Calendar_Apriorit.BLL
                     return new OperationDetails(false, ex.Message, "");
                 }
                 return new OperationDetails(true, "Done", "");
+            }
+        }
+
+        public Dictionary<string, List<EventVM>> GetAllEventsThatStartsInHour()
+        {
+            using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
+            {
+                List<Event> events = Database.Events.Get().ToList();
+                List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+                List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
+                MultiplyRepeatEvents(_eventsVM, RepeatEvents);
+                List<EventVM> eventsThatStartsInHour = _eventsVM.FindAll(evVM => evVM.EventInfo.StartTime.Subtract(DateTime.Now) < new TimeSpan(0,59,59) && evVM.EventInfo.StartTime.Subtract(DateTime.Now) > new TimeSpan(0, 0, 59)).ToList();
+                Dictionary<string,List<EventVM>> UsersAndEventVMThatNeedNotificateEmail = new Dictionary<string,List<EventVM>>();
+                foreach(var eventVM in eventsThatStartsInHour) //это нужно из-за отсутствия у события прямой ссылки на юзера
+                {
+                    var CalendarsWithEventThatStartInHour = events.Find(ev => ev.Id == eventVM.IdEvent).Calendars;
+                    foreach (var cal in CalendarsWithEventThatStartInHour)
+                    {
+                        if (UsersAndEventVMThatNeedNotificateEmail.ContainsKey(cal.User.Email))
+                        {
+                            var eventsVMforCurrentUser = UsersAndEventVMThatNeedNotificateEmail[cal.User.Email];
+                            eventsVMforCurrentUser.Add(eventVM);
+                        }
+                        else
+                        {
+                            UsersAndEventVMThatNeedNotificateEmail.Add(cal.User.Email, new List<EventVM>() { eventVM });
+                        }
+                    }
+                }
+                return UsersAndEventVMThatNeedNotificateEmail;
             }
         }
 

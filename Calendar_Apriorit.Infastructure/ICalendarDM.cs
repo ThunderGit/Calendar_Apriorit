@@ -14,6 +14,7 @@ namespace Calendar_Apriorit.Infastructure
         Task<OperationDetails> EditEvent(EventVM eventVM, string EMail);
         Task<List<EventVM>> GetEvents(string EMail);
         Task<List<EventVM>> GetEventsById(string Email, params int[] IdEvents);
+        Dictionary<string, List<EventVM>> GetAllEventsThatStartsInHour();
 
 
     }
