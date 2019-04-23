@@ -55,7 +55,7 @@ $(function () {
                     calendar_header.css("background-color", "#27ae60").find("h1").text(MONTHS[Month - 1] + " " + Year);
                     calendar_weekdays.find("div").css("color", "#27ae60");
                     calendar_content.find("div").css("cursor", "pointer");
-                    calendar_content.find(".today").css("background-color", "#0000ff");
+                    calendar_content.find(".today").css("background-color", "#27ae60");
                     
                     for (var i = 0; i < Events.length; i++)
                     {
