@@ -11,19 +11,10 @@ $(function () {
             success: function (response) {
                 
                 Events = response;
-                for (var i = 0; i < response.length; i++) {
-                    //response[i].EventInfo.StartTime = moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, hh:mm:ss");
-                    //response[i].EventInfo.EndTime = moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, hh:mm:ss");
-                    
-                    //alert(response[i].EventInfo.StartTime);
-                                       
-                }
                 console.log(Events);
                 
-
                 function MainFunction() {
-                    //alert(Events);
-                    
+                  
                     SetWeekdays();
                     var Days = SetDays();
                     var DayOfWeek_INDEX = 0;
@@ -78,8 +69,7 @@ $(function () {
                         " </td></tr> <tr><td> Start:&nbsp &nbsp" + moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, HH:mm") +
                         " </td></tr> <tr><td> Finish: " + moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, HH:mm") +
                         " </td></tr></table> <br/><br/>";
-                    //alert(EventModal);
-                    //alert(EventModal.slice(EventModal.indexOf(Events[i].Title), EventModal.indexOf(' '));
+                    
                     var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
                         '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
                         '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
