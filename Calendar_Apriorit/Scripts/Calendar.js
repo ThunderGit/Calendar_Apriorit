@@ -1,6 +1,5 @@
 $(function () {
     var Events;
-    var DaysID = [];
     $(document).ready(function () {
         $.ajax({
             type: "GET",
@@ -12,10 +11,19 @@ $(function () {
             success: function (response) {
                 
                 Events = response;
+                for (var i = 0; i < response.length; i++) {
+                    //response[i].EventInfo.StartTime = moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, hh:mm:ss");
+                    //response[i].EventInfo.EndTime = moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, hh:mm:ss");
+                    
+                    //alert(response[i].EventInfo.StartTime);
+                                       
+                }
                 console.log(Events);
+                
 
                 function MainFunction() {
                     //alert(Events);
+                    
                     SetWeekdays();
                     var Days = SetDays();
                     var DayOfWeek_INDEX = 0;
@@ -51,55 +59,93 @@ $(function () {
                     
                     for (var i = 0; i < Events.length; i++)
                     {
-                        var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
-                            '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
-
-                        var Text1 = calendar_content.find(IDstart).text();
-
-                        var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
-                            '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
-                            '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
-
-                        var Text2 = calendar_content.find(IDend).text();
-                        calendar_content.find(IDstart).text(Text1+"\n"+Events[i].Title);
-                        calendar_content.find(IDend).text(Text2 + "\n" + Events[i].Title);
-
-                        DaysID.push(IDstart);
-                        //calendar_content.find(IDstart).on("click", function () {
-
-                        //    //alert(calendar_content.find(IDstart).text());
-                           
-                        //    var modal = document.getElementById('myModal');
-                        //    var span = document.getElementsByClassName("close")[0];
-                        //    modal.style.display = "block";
-                        //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDstart).text();
-                        //    span.onclick = function ()
-                        //    {
-                        //        modal.style.display = "none";
-                        //    }
-                        //})
-
-                        if (IDstart !== IDend) {
-                            //calendar_content.find(IDend).on("click", function () {
-
-                            //    //alert(calendar_content.find(IDend).text());
-                            //    var modal = document.getElementById('myModal');
-                            //    var span = document.getElementsByClassName("close")[0];
-                            //    modal.style.display = "block";
-                            //    document.getElementById("ModalText").innerHTML = calendar_content.find(IDend).text();
-                            //    span.onclick = function ()
-                            //    {
-                            //        modal.style.display = "none";
-                            //    }
-                            //})
-                            DaysID.push(IDend);
-                        }
+                        ShowEvents(Events, i);
                     }
 
                     SetCSS();
                 }
 
+                //Вывод ивентов в календарь и в модалку
+                function ShowEvents(Events, i) {
+                   
+                    var IDstart = '#DAY' + moment(Events[i].EventInfo.StartTime).format("D") +
+                        '-MONTH' + moment(Events[i].EventInfo.StartTime).format("M") +
+                        '-YEAR' + moment(Events[i].EventInfo.StartTime).format("YYYY");
+
+                    var Text1 = $(IDstart).text();
+                    var EventModal = "<table><tr><th>" + Events[i].Title +
+                        " </th></tr> <tr><td>" + Events[i].EventInfo.Description +
+                        " </td></tr> <tr><td> Start:&nbsp &nbsp" + moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, HH:mm") +
+                        " </td></tr> <tr><td> Finish: " + moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, HH:mm") +
+                        " </td></tr></table> <br/><br/>";
+                    //alert(EventModal);
+                    //alert(EventModal.slice(EventModal.indexOf(Events[i].Title), EventModal.indexOf(' '));
+                    var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
+                        '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +
+                        '-YEAR' + moment(Events[i].EventInfo.EndTime).format("YYYY");
+                    
+                    var Text2 = $(IDend).text();
+
+                    $(IDstart).text(Text1 + "\n" + Events[i].Title);
+                    $(IDend).text(Text2 + "\n" + Events[i].Title);
+
+                    if ($(IDstart).data("Info") !== undefined &&
+                        $(IDstart).data("Info").Modal !== EventModal.slice(EventModal.indexOf('<'), EventModal.length))
+                    {
+                        $(IDstart).data("Info", {
+                            Modal: $(IDstart).data("Info").Modal + EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    else {
+                        $(IDstart).data("Info", {
+                            Modal: EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    if ($(IDend).data("Info") !== undefined &&
+                        $(IDend).data("Info").Modal !== EventModal.slice(EventModal.indexOf('<'), EventModal.length)) {
+                        $(IDend).data("Info", {
+                            Modal: $(IDend).data("Info").Modal +EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                    else {
+                        $(IDend).data("Info", {
+                            Modal: EventModal.slice(EventModal.indexOf('<'), EventModal.length)
+                        });
+                    }
+                   
+                    SetEventOnCalendarAndModal(IDstart, IDstart);
+                    SetEventOnCalendarAndModal(IDend, IDend);
+                    if (IDstart.localeCompare(IDend) != 0)//Если ивент на несколько дней, заполняем даты от начальной до конечной
+                    {
+                        var Begin = new Date(moment(Events[i].EventInfo.StartTime).format("MMMM D,YYYY"));
+                        Begin.setDate(Begin.getDate() + 1);
+                        var End = new Date(moment(Events[i].EventInfo.EndTime).format("MMMM D,YYYY"));
+                        for (Begin,End;Begin < End; Begin.setDate(Begin.getDate() + 1))
+                        {
+                            
+                            var ID = '#DAY' + moment(Begin).format("D") +
+                                '-MONTH' + moment(Begin).format("M") +
+                                '-YEAR' + moment(Begin).format("YYYY");
+                            var Text = $(ID).text();
+
+                            $(ID).text(Text + "\n" + Events[i].Title);
+                            SetEventOnCalendarAndModal(ID, IDend);
+                        }
+                    }
+                }
+                function SetEventOnCalendarAndModal(Id1, Id2) {//Вывод ивента(ов) в календарь и в модальное окно
+                    $(Id1).on('click', function (event) {
+
+                        var eventData = $(Id2).data("Info").Modal;
+                        var modal = document.getElementById('myModal');
+                        var span = document.getElementsByClassName("close")[0];
+                        modal.style.display = "block";
+                        document.getElementById("ModalText").innerHTML = eventData;
+                        span.onclick = function () {
+                            modal.style.display = "none";
+                        }
+                    })
+                }
                 function SetDays() {
                     var e = [];
                     for (var i = 1; i < GetNewdateDate(Year, Month) + 1; i++) {
@@ -168,30 +214,7 @@ $(function () {
                 var calendar_content = Calendar.find("#calendar_content");
                 SetDate();
                 MainFunction();
-                alert(DaysID);
-                DaysID = jQuery.unique(DaysID);
-                for (var i = 0; i < DaysID.length-1; ++i)
-                {
-
-                    //alert(calendar_content.find(DaysID[i]).text());
-                    calendar_content.find(DaysID[i]).on("click", function () {
-                        var modal = document.getElementById('myModal');
-                        var span = document.getElementsByClassName("close")[0];
-                        modal.style.display = "block";
-                        document.getElementById('ModalText').innerHTML = calendar_content.find(DaysID[i]).text().slice(calendar_content.find(DaysID[i]).text().indexOf('\n'), calendar_content.find(DaysID[i]).text().length);
-                        span.onclick = function () {
-                            modal.style.display = "none";
-                        }
-                        window.onclick = function (event) {
-                            if (event.target == modal) {
-                                modal.style.display = "none";
-                            }
-                        }
-                    })
-                }
-                //calendar_content.find("#DAY27-MONTH4-YEAR2019").on("click", function () {
-                //    alert("Hello");
-                //});
+                
                 calendar_header.find('a[class^="icon-chevron"]').on("click", function () {
                     var direction = $(this);
                     var SurfDirection = function (direction) {
