@@ -44,6 +44,23 @@ namespace Calendar_Apriorit.BLL
             }
         }
 
+        private bool IsEditEventSatisfiesSchedule(DateTime start, DateTime end, Calendar cal,int id)
+        {
+            List<Event> events = cal.Events.Where(ev => ev.Id != id).ToList<Event>();
+            List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
+            List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
+            MultiplyRepeatEvents(_eventsVM, RepeatEvents);
+
+            var EventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList();
+            bool IsAnyEventsThatStartsBetweenStartAndEndTime = EventsThatStartsBetweenStartAndEndTime.Count() > 0;
+
+            var EventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList();
+            bool IsAnyEventsThatEndsBetweenStartAndEndTime = EventsThatEndsBetweenStartAndEndTime.Count() > 0;
+            if (IsAnyEventsThatStartsBetweenStartAndEndTime || IsAnyEventsThatEndsBetweenStartAndEndTime)
+                return false;
+            else return true;
+
+        }
         private bool IsEventSatisfiesSchedule(DateTime start, DateTime end, Calendar cal)
         {
             List<Event> events = cal.Events.ToList<Event>();
@@ -87,7 +104,7 @@ namespace Calendar_Apriorit.BLL
             {
                 User user = await Database.UserManager.FindByEmailAsync(EMail);
                 Calendar cal = user.UserCalendar;
-                if (!IsEventSatisfiesSchedule(eventVM.EventInfo.StartTime, eventVM.EventInfo.EndTime, cal))
+                if (!IsEditEventSatisfiesSchedule(eventVM.EventInfo.StartTime, eventVM.EventInfo.EndTime, cal, eventVM.IdEvent))
                     return new OperationDetails(false, "Edit event isn`t satisfies schedule", "DateTimes");
                 Event editThisEvent = cal.Events.First(c => c.Id == eventVM.IdEvent);
                 if (editThisEvent == null)
@@ -144,11 +161,14 @@ namespace Calendar_Apriorit.BLL
             if (eventVM.EventInfo.IsRepeated == false)
             {
                 eventInfoEdit.RepeatInfo = null;
-                database.RepeatInfos.Remove(repeatInfoEdit);
+                editThisEvent.EventInfo = eventInfoEdit;
+               
             }
             else
             {
                 repeatInfoEdit = Context.Mapper.MapTo<RepeatInfo, RepeatInfoVM>(eventVM.EventInfo.RepeatInfo);
+                eventInfoEdit.RepeatInfo = repeatInfoEdit;
+                editThisEvent.EventInfo = eventInfoEdit;
             }
             database.Events.Update(editThisEvent);
             await database.SaveAsync();
@@ -248,7 +268,7 @@ namespace Calendar_Apriorit.BLL
 
         }
 
-        public async Task<List<EventVM>> GetEventsById(string Email, params int[] IdEvents)
+        public async Task<List<EventVM>> GetEventById(string Email,  int IdEvent)
         {
             using (var Database = Context.Factory.GetService<IUnitOfWork>(Context.RootContext))
             {
@@ -261,7 +281,7 @@ namespace Calendar_Apriorit.BLL
                 }
 
                 List<Event> events = cal.Events.
-                    Where(ev => IdEvents.First(idFromView => idFromView == ev.Id) == ev.Id)
+                    Where(ev => IdEvent == ev.Id)
                     .ToList<Event>();
 
                 List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);

@@ -1,10 +1,17 @@
 ﻿@model Calendar_Apriorit.ViewModel.EventVM
 
 @{
-	ViewBag.Title = "CreateNewEvent";
+	ViewBag.Title = "EditEvent";
 }
+
 <fieldset>
 	<div class="form-horizontal">
+		<div style="display : none " class="editor-label">
+
+		</div>
+		<div class="editor-label" style="display : none ">
+			<input type="number" id="IdEvent" />
+		</div>
 		<div class="editor-label">
 			Title
 		</div>
@@ -23,7 +30,7 @@
 			Time start event
 		</div>
 		<div class="editor-label">
-			<input type="datetime-local" min="@DateTime.Now"id="StartTime" />
+			<input type="datetime-local" min="@DateTime.Now" id="StartTime" />
 		</div>
 		<div class="editor-label">
 			Time finish event
@@ -37,7 +44,7 @@
 		<div class="editor-label">
 			<input type="checkbox" onchange="document.getElementById('hide').style.display = this.checked ? 'block' : 'none'" name="IsRepeated" id="IsRepeated" />
 		</div>
-		
+
 		<div id="hide" style="display:none" ;>
 			<div class="editor-label">
 				Тип повтора
@@ -55,29 +62,64 @@
 			<div class="editor-label">
 				<input type="checkbox" onchange="document.getElementById('hide2').style.display = this.checked ? 'block' : 'none'" name="IsUnlimitedQuanties" id="IsUnlimitedQuanties" />
 			</div>
-			<div id="hide2"  style="display:none";>
+			<div id="hide2" style="display:none" ;>
 				<div class="editor-label">
 					Количество повторов
 				</div>
 				<div class="editor-label">
-					<input type="number" id="QuantityRepeats" value="0"/>
+					<input type="number" id="QuantityRepeats" value="0" />
 				</div>
 
 			</div>
-			
+
 
 		</div>
 		<div class="editor-label">
 			<br />
-			<input class="btn-default" type="button" id="CreateNewEvent" value="Save" />
+			<input class="btn-default" type="button" id="EditEvent" value="Edit" />
 		</div>
 	</div>
 </fieldset>
-<script type="text/javascript">
-	$(function () {
-		$("#CreateNewEvent").click(function () {
-			var EventVM;
+<script src="~/Scripts/moment.js"></script>
+<script>
+	$(document).ready(function () {
+
+		$.ajax({
+			type: "GET",
+			url: document.URL.replace("Edit","Get"),
+			success: successFunc,
+			error: function (response) {
+				alert(response.responseText);
+			}
+		});
+
+		function successFunc(data, status) {
+			console.log(document.URL);
+			console.log(data);
+			$("#IdEvent").val(data.IdEvent);
+			$("#Title").val(data.Title);
+			$("#Description").val(data.EventInfo.Description);
+			$("#StartTime").val(moment(data.EventInfo.StartTime).format("YYYY-MM-DDTHH:mm"));
+			console.log(moment(data.EventInfo.StartTime).format("YYYY-MM-DDTHH:mm"));
+			$("#EndTime").val(moment(data.EventInfo.EndTime).format("YYYY-MM-DDTHH:mm"));
+			$("#IsRepeated").val(data.EventInfo.IsRepeated);
+			if (data.EventInfo.IsRepeated == true) {
+				$("#TypeRepeat").val(data.EventInfo.RepeatInfo.TypeRepeat);
+
+				$("#IsUnlimitedQuanties").val(data.EventInfo.RepeatInfo.IsUnlimitedQuanties);
+				$("#QuantityRepeats").val(data.EventInfo.RepeatInfo.QuantityRepeats);
+			}
 			
+
+		}
+
+
+	});
+
+	$(function () {
+		$("#EditEvent").click(function () {
+			var EventVM;
+
 			var RepeatInfoVM;
 			var EventInfoVM;
 			if ($("#IsRepeated").prop("checked")) {
@@ -104,33 +146,39 @@
 				});
 
 			}
+			
+
+			var n = document.URL.lastIndexOf('/');
+			var result = document.URL.substring(n + 1);
 			EventVM = JSON.stringify({
-				'Id': null,
+				'IdEvent': result,
 				'Title': $('#Title').val(),
 
 			});
 			console.log("3");
 			$.ajax({
 				type: "POST",
-				url: "/Calendar/CreateNewEvent",
+				url: "/Calendar/EditEvent",
 				data: { EventVM, EventInfoVM, RepeatInfoVM },
 				beforeSend: function () {
-					
-					
-						},
+
+
+				},
 				success: function (response) {
 					alert(response);
-							window.location.href = "/Home/Index";
+					window.location.href = "/Home/Index";
 
-						},
-						failure: function (response) {
-							alert(response.responseText);
-						},
-						error: function (response) {
-							alert(response.responseText);
-						}
+				},
+				failure: function (response) {
+					alert(response.responseText);
+				},
+				error: function (response) {
+					alert(response.responseText);
+				}
 			});
-			
+
 		});
 	});
+
 </script>
+

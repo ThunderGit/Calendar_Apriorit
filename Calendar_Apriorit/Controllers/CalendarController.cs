@@ -35,6 +35,10 @@ namespace Calendar_Apriorit.Controllers
         {
             return View();
         }
+        public ActionResult EditEvent(int id)
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<string> CreateNewEvent(string EventVM,string EventInfoVM,string RepeatInfoVM)
         {
@@ -49,16 +53,17 @@ namespace Calendar_Apriorit.Controllers
                 else return "Провал :" + result.Message;
             }  
         }
-
-        public async Task<ActionResult> EditEvent(int id)
+        [HttpGet]
+        public async Task<JsonResult> GetEvent(int id)
         {
             using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
             {
                 var email2 = User.Identity.Name;
-                List<EventVM> Event = await  CalendarDomain.GetEventsById(email2, id);
+                List<EventVM> Event = await  CalendarDomain.GetEventById(email2, id);
                 if (Event.Count == 1)
-                    return View(Event[1]);
-                else return HttpNotFound();
+                    return Json(Event[0], JsonRequestBehavior.AllowGet);
+                else throw new NotImplementedException();
+                //else return HttpNotFound();
 
             }
         }
