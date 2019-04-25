@@ -78,14 +78,21 @@
 	$(function () {
 		$("#CreateNewEvent").click(function () {
 			var EventVM;
+			var boolforrepeat;
+			if ($('#IsUnlimitedQuanties').prop("checked")) {
+				boolforrepeat = false;
+				}
+			else   {
+				boolforrepeat = true;
+			}
 			
 			var RepeatInfoVM;
 			var EventInfoVM;
 			if ($("#IsRepeated").prop("checked")) {
 				RepeatInfoVM = JSON.stringify({
-					'WeekDayForRepeat': $('#DayRepeat').val(),
 					'TypeRepeat': $('#TypeRepeat').val(),
 					'QuantityRepeats': $('#QuantityRepeats').val(),
+					'IsUnlimitedQuanties': boolforrepeat
 				});
 				EventInfoVM = JSON.stringify({
 					'Description': $('#Description').val(),
@@ -120,16 +127,25 @@
 					
 						},
 				success: function (response) {
-					alert(response);
-							window.location.href = "/Home/Index";
+					bootbox.alert({
+						message: response,
+						size: 'small'
+					});
+					window.location.href = "/Home/Index";
 
-						},
-						failure: function (response) {
-							alert(response.responseText);
-						},
-						error: function (response) {
-							alert(response.responseText);
-						}
+					},
+					failure: function (response) {
+						bootbox.alert({
+							message: response,
+							size: 'small'
+						});
+					},
+					error: function (response) {
+						bootbox.alert({
+							message: response,
+							size: 'small'
+						});
+					}
 			});
 			
 		});

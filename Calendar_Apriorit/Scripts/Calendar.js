@@ -68,7 +68,7 @@ $(function () {
                         " </th></tr> <tr><td>" + Events[i].EventInfo.Description +
                         " </td></tr> <tr><td> Start:&nbsp &nbsp" + moment(Events[i].EventInfo.StartTime).format("DD-MM-YYYY, HH:mm") +
                         " </td></tr> <tr><td> Finish: " + moment(Events[i].EventInfo.EndTime).format("DD-MM-YYYY, HH:mm") +
-                        " </td></tr></table> <br/><br/>";
+						" </td></tr>  <tr><td>" + "<form action=\"EditEvent/" + Events[i].IdEvent + "\"><button type=\"submit\">Edit</button></form>" + " </td></tr> </table> <br/><br/>";
                     
                     var IDend = '#DAY' + moment(Events[i].EventInfo.EndTime).format("D") +
                         '-MONTH' + moment(Events[i].EventInfo.EndTime).format("M") +

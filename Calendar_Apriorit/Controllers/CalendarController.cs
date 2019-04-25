@@ -33,10 +33,22 @@ namespace Calendar_Apriorit.Controllers
 
         public ActionResult CreateNewEvent()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
-        public ActionResult EditEvent(int id)
+        public ActionResult EditEvent(int? id)
         {
+            if(id == null)
+            {
+                return RedirectToAction("Calendar", "Calendar"); 
+            }
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
         [HttpPost]
@@ -113,6 +125,10 @@ namespace Calendar_Apriorit.Controllers
         [HttpGet]
         public async Task<JsonResult> ShowEvents()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
             using (var CalendarDomain = WebContext.Factory.GetService<ICalendarDM>(WebContext.RootContext))
             {
                 string email = User.Identity.Name;

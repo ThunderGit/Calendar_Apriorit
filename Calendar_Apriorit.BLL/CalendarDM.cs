@@ -46,15 +46,15 @@ namespace Calendar_Apriorit.BLL
 
         private bool IsEditEventSatisfiesSchedule(DateTime start, DateTime end, Calendar cal,int id)
         {
-            List<Event> events = cal.Events.Where(ev => ev.Id != id).ToList<Event>();
+            List<Event> events = cal.Events.Where(ev => ev.Id != id || ev.EventInfo.StartTime == ev.EventInfo.EndTime).ToList<Event>();
             List<EventVM> _eventsVM = Context.Mapper.MapTo<List<EventVM>, List<Event>>(events);
             List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
             MultiplyRepeatEvents(_eventsVM, RepeatEvents);
 
-            var EventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList();
+            var EventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) > 0 && ev.EventInfo.EndTime.CompareTo(start) < 0).ToList();
             bool IsAnyEventsThatStartsBetweenStartAndEndTime = EventsThatStartsBetweenStartAndEndTime.Count() > 0;
 
-            var EventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList();
+            var EventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) > 0 && ev.EventInfo.EndTime.CompareTo(end) < 0).ToList();
             bool IsAnyEventsThatEndsBetweenStartAndEndTime = EventsThatEndsBetweenStartAndEndTime.Count() > 0;
             if (IsAnyEventsThatStartsBetweenStartAndEndTime || IsAnyEventsThatEndsBetweenStartAndEndTime)
                 return false;
@@ -68,8 +68,8 @@ namespace Calendar_Apriorit.BLL
             List<EventVM> RepeatEvents = _eventsVM.Where(ev => ev.EventInfo.IsRepeated == true).ToList();
             MultiplyRepeatEvents(_eventsVM, RepeatEvents);
 
-            bool IsAnyEventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) >= 0 && ev.EventInfo.EndTime.CompareTo(start) <= 0).ToList().Count() > 0;
-            bool IsAnyEventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) >= 0 && ev.EventInfo.EndTime.CompareTo(end) <= 0).ToList().Count() > 0;
+            bool IsAnyEventsThatStartsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(start) > 0 && ev.EventInfo.EndTime.CompareTo(start) < 0).ToList().Count() > 0;
+            bool IsAnyEventsThatEndsBetweenStartAndEndTime = _eventsVM.Where(ev => ev.EventInfo.StartTime.CompareTo(end) > 0 && ev.EventInfo.EndTime.CompareTo(end) < 0).ToList().Count() > 0;
             if (IsAnyEventsThatStartsBetweenStartAndEndTime || IsAnyEventsThatEndsBetweenStartAndEndTime)
                 return false;
             else return true;
@@ -255,12 +255,12 @@ namespace Calendar_Apriorit.BLL
                     return date.AddDays(7*numberOfRepeat);
 
                 case TypeRepeat.Month:
-                    date.AddMonths(numberOfRepeat);
-                    return date;
+                    return date.AddMonths(numberOfRepeat);
+                    
 
                 case TypeRepeat.Year:
-                    date.AddYears(numberOfRepeat);
-                    return date;
+                    return date.AddYears(numberOfRepeat);
+                   
                 default:
                     throw new ArgumentException();
 

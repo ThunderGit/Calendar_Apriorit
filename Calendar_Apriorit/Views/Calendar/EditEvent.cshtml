@@ -94,19 +94,25 @@
 		});
 
 		function successFunc(data, status) {
-			console.log(document.URL);
+			
 			console.log(data);
 			$("#IdEvent").val(data.IdEvent);
 			$("#Title").val(data.Title);
 			$("#Description").val(data.EventInfo.Description);
 			$("#StartTime").val(moment(data.EventInfo.StartTime).format("YYYY-MM-DDTHH:mm"));
-			console.log(moment(data.EventInfo.StartTime).format("YYYY-MM-DDTHH:mm"));
+			
 			$("#EndTime").val(moment(data.EventInfo.EndTime).format("YYYY-MM-DDTHH:mm"));
-			$("#IsRepeated").val(data.EventInfo.IsRepeated);
+			if (data.EventInfo.IsRepeated == true) {
+				$("#IsRepeated").prop("checked", true);
+				document.getElementById('hide2').style.display = 'block';
+			}
 			if (data.EventInfo.IsRepeated == true) {
 				$("#TypeRepeat").val(data.EventInfo.RepeatInfo.TypeRepeat);
-
-				$("#IsUnlimitedQuanties").val(data.EventInfo.RepeatInfo.IsUnlimitedQuanties);
+				if(data.EventInfo.RepeatInfo.IsUnlimitedQuanties == false) {
+					$("#IsUnlimitedQuanties").prop("checked", true);
+					document.getElementById('hide2').style.display = 'block';
+				}
+				
 				$("#QuantityRepeats").val(data.EventInfo.RepeatInfo.QuantityRepeats);
 			}
 			
@@ -119,14 +125,20 @@
 	$(function () {
 		$("#EditEvent").click(function () {
 			var EventVM;
-
+			var boolforrepeat;
+			if ($('#IsUnlimitedQuanties').prop("checked")) {
+				boolforrepeat = false;
+			}
+			else {
+				boolforrepeat = true;
+			}
 			var RepeatInfoVM;
 			var EventInfoVM;
 			if ($("#IsRepeated").prop("checked")) {
 				RepeatInfoVM = JSON.stringify({
-					'WeekDayForRepeat': $('#DayRepeat').val(),
 					'TypeRepeat': $('#TypeRepeat').val(),
 					'QuantityRepeats': $('#QuantityRepeats').val(),
+					'IsUnlimitedQuanties': boolforrepeat
 				});
 				EventInfoVM = JSON.stringify({
 					'Description': $('#Description').val(),
@@ -146,16 +158,18 @@
 				});
 
 			}
-			
 
-			var n = document.URL.lastIndexOf('/');
-			var result = document.URL.substring(n + 1);
+			var jsgvn = document.URL;
+			var str = jsgvn.replace("?", "");
+			var n = str.lastIndexOf('/');
+			
+			var result = str.substring(n + 1);
 			EventVM = JSON.stringify({
 				'IdEvent': result,
 				'Title': $('#Title').val(),
 
 			});
-			console.log("3");
+			
 			$.ajax({
 				type: "POST",
 				url: "/Calendar/EditEvent",
@@ -165,15 +179,24 @@
 
 				},
 				success: function (response) {
-					alert(response);
+					bootbox.alert({
+						message: response,
+						size: 'small'
+					});
 					window.location.href = "/Home/Index";
 
 				},
 				failure: function (response) {
-					alert(response.responseText);
+					bootbox.alert({
+						message: response,
+						size: 'small'
+					});
 				},
 				error: function (response) {
-					alert(response.responseText);
+					bootbox.alert({
+						message: response,
+						size: 'small'
+					});
 				}
 			});
 
