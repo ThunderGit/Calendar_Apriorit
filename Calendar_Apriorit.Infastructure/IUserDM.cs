@@ -11,7 +11,7 @@ namespace Calendar_Apriorit.Infastructure
     public interface IUserDM : IDisposable
     {
         Task<OperationDetails> Create(RegisterVM regUser);
-        Task<ClaimsIdentity> Authenticate(RegisterVM user);
+        Task<ClaimsIdentity> Authenticate(LoginVM user);
         Task SetInitialData(RegisterVM user, List<string> roles);
     }
 }

@@ -1,43 +1,94 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title – приложение ASP.NET</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - My ASP.NET Application</title>
+	@Styles.Render("~/Content/css")
+	@Styles.Render("~/Content/Site.css")
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/scripts/jquery-3.3.1.js")
+	@Scripts.Render("~/scripts/jquery.validate.min.js")
+	@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+	@Scripts.Render("~/scripts/bootstrap.min.js")
+	@RenderSection("scripts", required: false)
+
+	@Scripts.Render("~/scripts/bootbox.min.js")
+
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Имя приложения", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                    <li>@Html.ActionLink("О программе", "About", "Home")</li>
-                    <li>@Html.ActionLink("Контакт", "Contact", "Home")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year – приложение ASP.NET</p>
-        </footer>
-    </div>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+
+				</button>
+				@Html.ActionLink("Calendar", "Calendar", "Calendar", new { area = "" }, new { @class = "navbar-brand" })
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li>@Html.ActionLink("Home", "Index", "Home")</li>
+					
+					@*<li>@Html.ActionLink("About", "About", "Home")</li>
+					<li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					@if (!User.Identity.IsAuthenticated)
+					{
+						<li>@Html.ActionLink("Войти", "Login", "Account")</li>
+						<li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
+					}
+					else
+					{
+						<li>
+							<a>Привет @User.Identity.Name</a>
+						</li>
+						<li>@Html.ActionLink("Добавить ивент", "CreateNewEvent", "Calendar")</li>
+						<li>@Html.ActionLink("Выход", "Logout", "Account")</li>
+					}
+
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container body-content">
+		@RenderBody()
+		<hr />
+		<footer>
+			<p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+		</footer>
+	</div>
+
+	<script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+	<!--Ссылка на автоматически сгенерированный скрипт хаба SignalR -->
+	<script src="~/Scripts/jquery.signalR.core.js"></script>
+	<script src="~/signalr/hubs"></script>
+	<script type="text/javascript">
+		$(function () {
+
+			var notificationhub = $.connection.notificationHub;
+
+			notificationhub.client.displayNotification = function (message) {
+				bootbox.alert({
+					message: "В ближайший час начнется события" + message,
+					size: 'small'
+				});
+				
+				console.log(message);
+			};
+			if ($.connection.hub && $.connection.hub.state === $.signalR.connectionState.disconnected) {
+				$.connection.hub.start()
+			}
+			
+			console.log("start");
+
+			});
+	</script>
 </body>
 </html>

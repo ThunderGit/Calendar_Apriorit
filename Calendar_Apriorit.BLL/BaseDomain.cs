@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Calendar_Apriorit.BLL
 {
-    public class BaseDomain : IDisposable
+    public class BaseDomain 
     {
         protected IBusinessContext Context { get; set; }
 

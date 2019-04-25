@@ -22,3 +22,40 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.sl_tp {
+	position: fixed;
+	top: 0;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	background: #f60;
+	width: 100%;
+	height: 40px;
+	box-shadow: 0 0 5px #777;
+	text-align: center;
+	color: #fff;
+}
+
+.sl_in {
+	position: fixed;
+	min-height: 200px;
+	top: -200px;
+	-webkit-transition-duration: 0.3s;
+	-moz-transition-duration: 0.3s;
+	-o-transition-duration: 0.3s;
+	transition-duration: 0.3s;
+	background: #313131;
+	width: 100%;
+	padding: 10px;
+	box-sizing: padding-box;
+}
+
+.sl_tp:hover {
+	top: 200px;
+}
+
+	.sl_tp:hover #sl_in {
+		top: 0;
+	}

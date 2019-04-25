@@ -21,7 +21,13 @@ namespace Calendar_Apriorit.ViewModel
         public string ConfirmPassword { get; set; }
         [Required]
         public string Name { get; set; }
-        public readonly string Role = "user";
+        public string Role
+        {
+            get
+            {
+                return "user";
+            }
+        }
        
         
     }
