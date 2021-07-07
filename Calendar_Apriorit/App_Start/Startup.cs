@@ -26,6 +26,8 @@ namespace Calendar_Apriorit.App_Start
                 AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
                 LoginPath = new PathString("/Account/Login"),
             });
+            app.MapSignalR();
+
         }
 
         //private IUserDM CreateUserService()

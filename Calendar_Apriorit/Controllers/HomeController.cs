@@ -10,14 +10,13 @@ namespace Calendar_Apriorit.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else return RedirectToAction("Calendar", "Calendar");
+            
         }
-        [Authorize(Roles = "admin")]
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
+        
     }
 }

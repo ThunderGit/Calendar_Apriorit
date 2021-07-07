@@ -37,7 +37,6 @@ namespace Calendar_Apriorit.Controllers
             {
                 using (var DomainUser = WebContext.Factory.GetService<IUserDM>(WebContext.RootContext))
                 {
-                    //UserDTO userDto = new UserDTO { Email = model.Email, Password = model.Password };
                     ClaimsIdentity claim = await DomainUser.Authenticate(model);
                     if (claim == null)
                     {
@@ -46,10 +45,15 @@ namespace Calendar_Apriorit.Controllers
                     else
                     {
                         AuthenticationManager.SignOut();
+                        var freshClaims = new List<Claim>
+                        {
+                           new Claim(ClaimTypes.Email, model.Email),
+                        };
                         AuthenticationManager.SignIn(new AuthenticationProperties
                         {
                             IsPersistent = true
                         }, claim);
+                        AuthenticationManager.AuthenticationResponseGrant.Identity.AddClaims(freshClaims);
                         return RedirectToAction("Index", "Home");
                     }
                 }

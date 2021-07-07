@@ -1,0 +1,42 @@
+body {
+    
+}
+
+h3{
+    text-align:center;
+
+}
+.form-horizontal {
+    zoom:1.2;
+    padding-top:5px;
+    width: 35%;
+    margin: 0 auto;
+    border: 2px solid #333333;
+    text-align: center;
+    word-wrap: normal;
+}
+.editor-label {
+    width: 80%;
+    padding-top: 5px;
+    margin: 0 auto;
+    word-wrap: normal;
+}
+input[type=datetime-local], [type=text], [type=number], #TypeRepeat, #hide2 {
+   
+    width: 80%;
+    text-align: center;
+    margin: 0 auto;
+    word-wrap: normal;
+}
+input[type=button] {
+
+    width: 55%;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 10px 10px 10px;
+    border-color: #bbbbbb;
+    word-wrap: break-word;
+}
